@@ -1,0 +1,445 @@
+.ag-icon {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+
+.ag-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.ag-field__label {
+  font-size: var(--ag-font-size-label);
+  font-weight: 600;
+  color: var(--ag-heading);
+}
+
+.ag-field__hint {
+  margin: 0;
+  font-size: var(--ag-font-size-label);
+  color: var(--ag-gray-600);
+}
+
+.ag-field__hint.is-error {
+  color: var(--ag-danger);
+}
+
+.ag-field__hint.is-success {
+  color: var(--ag-success);
+}
+
+.ag-input-wrap {
+  display: flex;
+  align-items: center;
+  height: var(--ag-control-height);
+  padding: 0 14px;
+  background: var(--ag-white);
+  border: 1px solid var(--ag-gray-200);
+  border-radius: var(--ag-radius);
+  transition: all 0.15s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.ag-input-wrap:hover:not(.is-disabled) {
+  border-color: var(--ag-primary);
+}
+
+.ag-input-wrap:focus-within:not(.is-disabled) {
+  border-color: var(--ag-primary);
+  box-shadow: var(--ag-shadow);
+}
+
+.ag-input-wrap.is-error {
+  border-color: var(--ag-danger);
+}
+
+.ag-input-wrap.is-success {
+  border-color: var(--ag-success);
+}
+
+.ag-input-wrap.is-disabled {
+  background: var(--ag-gray-100);
+  cursor: not-allowed;
+}
+
+.ag-input-wrap--textarea {
+  height: auto;
+  padding: 10px 14px;
+  align-items: flex-start;
+}
+
+.ag-input,
+.ag-textarea {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--ag-font-size);
+  color: var(--ag-text);
+  line-height: 1.5;
+}
+
+.ag-input::placeholder,
+.ag-textarea::placeholder {
+  color: var(--ag-gray-500);
+}
+
+.ag-input:disabled,
+.ag-textarea:disabled {
+  cursor: not-allowed;
+  color: var(--ag-gray-600);
+}
+
+.ag-textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+
+.ag-input__addon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--ag-gray-600);
+  font-size: 16px;
+}
+
+.ag-input__addon:first-child {
+  margin-right: 8px;
+}
+
+.ag-input__addon:last-child {
+  margin-left: 8px;
+}
+
+.ag-input__addon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ag-gray-600);
+  cursor: pointer;
+}
+
+.ag-input__addon-btn:hover {
+  color: var(--ag-primary);
+}
+
+.ag-select {
+  position: relative;
+  width: 100%;
+}
+
+.ag-select__trigger {
+  width: 100%;
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
+}
+
+.ag-select__value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--ag-font-size);
+  color: var(--ag-text);
+}
+
+.ag-select__value.is-placeholder {
+  color: var(--ag-gray-500);
+}
+
+.ag-select__dropdown {
+  position: absolute;
+  z-index: 1050;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  background: var(--ag-white);
+  border-radius: var(--ag-radius);
+  box-shadow: var(--ag-shadow-card);
+  max-height: 240px;
+  overflow: auto;
+}
+
+.ag-select__option {
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: var(--ag-font-size);
+}
+
+.ag-select__option:hover {
+  background: var(--ag-gray-100);
+}
+
+.ag-select__option.is-active {
+  color: var(--ag-primary);
+  font-weight: 600;
+  background: var(--ag-gray-100);
+}
+
+.ag-select__option.is-disabled {
+  color: var(--ag-gray-500);
+  cursor: not-allowed;
+}
+
+.ag-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: var(--ag-font-size);
+  color: var(--ag-text);
+  user-select: none;
+}
+
+.ag-check.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.ag-check__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.ag-checkbox__box,
+.ag-radio__dot {
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--ag-gray-400);
+  background: var(--ag-white);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.ag-checkbox__box {
+  border-radius: var(--ag-radius);
+}
+
+.ag-radio__dot {
+  border-radius: 50%;
+}
+
+.ag-check__input:focus-visible + .ag-checkbox__box,
+.ag-check__input:focus-visible + .ag-radio__dot {
+  box-shadow: var(--ag-shadow);
+}
+
+.ag-check__input:checked + .ag-checkbox__box {
+  background: var(--ag-primary);
+  border-color: var(--ag-primary);
+  color: var(--ag-white);
+}
+
+.ag-check__input:checked + .ag-radio__dot {
+  border-color: var(--ag-primary);
+  background: var(--ag-white);
+}
+
+.ag-check__input:checked + .ag-radio__dot::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ag-primary);
+}
+
+.ag-switch {
+  position: relative;
+  width: 44px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 11px;
+  background: var(--ag-gray-400);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.ag-switch.is-checked {
+  background: var(--ag-primary);
+}
+
+.ag-switch:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.ag-switch__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ag-white);
+  box-shadow: var(--ag-shadow);
+  transition: transform 0.2s ease;
+}
+
+.ag-switch.is-checked .ag-switch__thumb {
+  transform: translateX(22px);
+}
+
+.ag-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ag-upload__input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.ag-upload__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--ag-font-size-label);
+  color: var(--ag-text);
+}
+
+.ag-upload__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+
+.ag-message-root {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.ag-message {
+  min-width: 280px;
+  padding: 12px 18px;
+  border-radius: var(--ag-radius);
+  background: var(--ag-white);
+  box-shadow: var(--ag-shadow-card);
+  font-size: var(--ag-font-size);
+  font-weight: 600;
+  color: var(--ag-heading);
+  pointer-events: auto;
+}
+
+.ag-message--success {
+  border-left: 4px solid var(--ag-success);
+}
+
+.ag-message--error {
+  border-left: 4px solid var(--ag-danger);
+}
+
+.ag-message--warning {
+  border-left: 4px solid var(--ag-warning);
+}
+
+.ag-message--info {
+  border-left: 4px solid var(--ag-info);
+}
+
+/* ---------- Form / FormItem ---------- */
+.ag-form {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  gap: 4px 16px;
+}
+
+.ag-form--vertical .ag-form-item__label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.ag-form-item {
+  grid-column: span 24;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.ag-form-item--span-12 { grid-column: span 12; }
+.ag-form-item--span-8 { grid-column: span 8; }
+
+.ag-form-item__label {
+  flex-shrink: 0;
+  width: 120px;
+  padding-top: 9px;
+  text-align: right;
+  font-size: var(--ag-font-size);
+  color: var(--ag-gray-700);
+  line-height: 1.4;
+}
+
+.ag-form--vertical .ag-form-item {
+  display: block;
+}
+
+.ag-form--vertical .ag-form-item__label {
+  width: auto;
+  padding-top: 0;
+  text-align: left;
+}
+
+.ag-form-item__control {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 错误态：FormItem 染红内部任意控件（input-wrap 系 + switch/checkbox/radio） */
+.ag-form-item.is-error .ag-input-wrap {
+  border-color: var(--ag-danger);
+}
+
+.ag-form-item.is-error .ag-input-wrap:focus-within {
+  box-shadow: 0 0 0 3px rgba(245, 54, 92, 0.15);
+}
+
+.ag-form-item.is-error .ag-switch {
+  outline: 2px solid var(--ag-danger);
+  outline-offset: 2px;
+}
+
+.ag-form-item__error {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ag-danger);
+}
+
+.ag-form-item__hint {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ag-gray-500);
+}

@@ -1,0 +1,29 @@
+{
+  "name": "@argon-kit/contract-tests",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@argon-kit/calendar": "workspace:*",
+    "@argon-kit/charts": "workspace:*",
+    "@argon-kit/core": "workspace:*",
+    "@argon-kit/editor": "workspace:*",
+    "@argon-kit/icons": "workspace:*",
+    "@argon-kit/plugins": "workspace:*",
+    "@argon-kit/react": "workspace:*",
+    "@argon-kit/svelte": "workspace:*",
+    "@argon-kit/vue": "workspace:*",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "jsdom": "^26.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "svelte": "^5.16.0",
+    "vitest": "^3.0.5",
+    "vue": "^3.5.13"
+  }
+}

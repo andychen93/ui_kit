@@ -1,0 +1,44 @@
+{
+  "name": "@argon-kit/svelte",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "peerDependencies": {
+    "svelte": "^5.0.0"
+  },
+  "dependencies": {
+    "@argon-kit/core": "workspace:*",
+    "@argon-kit/icons": "workspace:*",
+    "@argon-kit/styles": "workspace:*"
+  },
+  "devDependencies": {
+    "@sveltejs/package": "^2.3.0",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@testing-library/svelte": "^5.2.6",
+    "jsdom": "^26.0.0",
+    "svelte": "^5.16.0",
+    "svelte-check": "^4.1.0",
+    "svelte2tsx": "^0.7.61",
+    "typescript": "^5.6.3",
+    "vitest": "^3.0.5"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "svelte-check --tsconfig ./tsconfig.json",
+    "build": "svelte-package -i src -o dist"
+  },
+  "main": "./dist/index.js",
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "!dist/**/*.test.*"
+  ]
+}

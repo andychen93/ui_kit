@@ -1,0 +1,200 @@
+/* ---------- Notification ---------- */
+.ag-notification-container {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1090;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(360px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.ag-notification {
+  pointer-events: auto;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--ag-white);
+  border-radius: var(--ag-radius-card);
+  box-shadow: 0 15px 35px rgba(50, 50, 93, 0.15), 0 5px 15px rgba(0, 0, 0, 0.08);
+  animation: ag-notification-in 0.25s ease;
+  overflow: hidden;
+}
+
+.ag-notification.is-closing {
+  animation: ag-notification-out 0.2s ease forwards;
+}
+
+.ag-notification__accent {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--ag-primary);
+}
+
+.ag-notification--primary .ag-notification__accent { background: var(--ag-primary); }
+.ag-notification--info .ag-notification__accent { background: var(--ag-info); }
+.ag-notification--success .ag-notification__accent { background: var(--ag-success); }
+.ag-notification--warning .ag-notification__accent { background: var(--ag-warning); }
+.ag-notification--danger .ag-notification__accent { background: var(--ag-danger); }
+
+.ag-notification__icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+}
+
+.ag-notification__icon--primary { color: var(--ag-primary); }
+.ag-notification__icon--info { color: var(--ag-info); }
+.ag-notification__icon--success { color: var(--ag-success); }
+.ag-notification__icon--warning { color: var(--ag-warning); }
+.ag-notification__icon--danger { color: var(--ag-danger); }
+
+.ag-notification__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.ag-notification__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ag-heading);
+  line-height: 1.4;
+}
+
+.ag-notification__content {
+  margin-top: 3px;
+  font-size: var(--ag-font-size-label);
+  color: var(--ag-text);
+  line-height: 1.5;
+}
+
+.ag-notification__close {
+  flex-shrink: 0;
+  border: 0;
+  background: none;
+  padding: 2px;
+  cursor: pointer;
+  color: var(--ag-gray-500);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.ag-notification__close:hover {
+  color: var(--ag-gray-700);
+}
+
+@keyframes ag-notification-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ag-notification-out {
+  to {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+/* ---------- SweetAlert ---------- */
+.ag-swal-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 1082;
+  background: rgba(23, 43, 77, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: ag-swal-fade 0.2s ease;
+}
+
+.ag-swal {
+  position: relative;
+  width: min(420px, 100%);
+  padding: 32px 28px 28px;
+  background: var(--ag-white);
+  border-radius: 8px;
+  box-shadow: 0 30px 60px rgba(50, 50, 93, 0.25);
+  text-align: center;
+  animation: ag-swal-pop 0.25s ease;
+}
+
+@keyframes ag-swal-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ag-swal-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* rbac SweetAlert：80px 渐变圆图标 */
+.ag-swal__icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ag-white);
+}
+
+.ag-swal__icon svg {
+  width: 36px;
+  height: 36px;
+}
+
+.ag-swal--success .ag-swal__icon { background: var(--ag-gradient-success); }
+.ag-swal--error .ag-swal__icon { background: var(--ag-gradient-danger); }
+.ag-swal--warning .ag-swal__icon { background: var(--ag-gradient-warning); }
+.ag-swal--info .ag-swal__icon { background: var(--ag-gradient-info); }
+.ag-swal--primary .ag-swal__icon { background: var(--ag-gradient-primary); }
+
+.ag-swal__title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--ag-heading);
+  line-height: 1.4;
+}
+
+.ag-swal__content {
+  margin: 0;
+  font-size: var(--ag-font-size);
+  color: var(--ag-text);
+  line-height: 1.6;
+}
+
+.ag-swal__actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 26px;
+}

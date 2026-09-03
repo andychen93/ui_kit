@@ -1,0 +1,274 @@
+.ag-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--ag-control-height);
+  padding: 0 20px;
+  border: 1px solid transparent;
+  border-radius: var(--ag-radius);
+  font-family: inherit;
+  font-size: var(--ag-font-size);
+  font-weight: var(--ag-font-weight-btn);
+  letter-spacing: 0.025em;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--ag-shadow);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.ag-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.ag-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.ag-btn--sm {
+  height: var(--ag-control-height-sm);
+  padding: 0 14px;
+}
+
+.ag-btn--lg {
+  height: var(--ag-control-height-lg);
+  padding: 0 28px;
+}
+
+.ag-btn--block {
+  display: flex;
+  width: 100%;
+}
+
+.ag-btn--icon-only {
+  width: var(--ag-control-height);
+  padding: 0;
+}
+
+.ag-btn--icon-only.ag-btn--sm {
+  width: var(--ag-control-height-sm);
+}
+
+.ag-btn--icon-only.ag-btn--lg {
+  width: var(--ag-control-height-lg);
+}
+
+.ag-btn--primary {
+  background: var(--ag-primary);
+  color: var(--ag-white);
+  border-color: var(--ag-primary);
+}
+
+.ag-btn--info {
+  background: var(--ag-info);
+  color: var(--ag-white);
+  border-color: var(--ag-info);
+}
+
+.ag-btn--success {
+  background: var(--ag-success);
+  color: var(--ag-white);
+  border-color: var(--ag-success);
+}
+
+.ag-btn--warning {
+  background: var(--ag-warning);
+  color: var(--ag-white);
+  border-color: var(--ag-warning);
+}
+
+.ag-btn--danger {
+  background: var(--ag-danger);
+  color: var(--ag-white);
+  border-color: var(--ag-danger);
+}
+
+.ag-btn--default {
+  background: var(--ag-default);
+  color: var(--ag-white);
+  border-color: var(--ag-default);
+}
+
+/* rbac .ps-btn-neutral：白底 + primary 字 + gray-200 边 */
+.ag-btn--neutral {
+  background: var(--ag-white);
+  color: var(--ag-primary);
+  border-color: var(--ag-gray-200);
+}
+
+.ag-btn--outline {
+  background: var(--ag-white);
+  color: var(--ag-primary);
+  border-color: var(--ag-primary);
+  box-shadow: none;
+}
+
+.ag-btn--link {
+  background: transparent;
+  color: var(--ag-primary);
+  border-color: transparent;
+  box-shadow: none;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.ag-btn--link:hover:not(:disabled) {
+  text-decoration: underline;
+  transform: none;
+}
+
+.ag-btn--gradient-primary {
+  background: var(--ag-gradient-primary);
+  color: var(--ag-white);
+  border-color: transparent;
+}
+
+.ag-btn--gradient-info {
+  background: var(--ag-gradient-info);
+  color: var(--ag-white);
+  border-color: transparent;
+}
+
+.ag-btn--gradient-success {
+  background: var(--ag-gradient-success);
+  color: var(--ag-white);
+  border-color: transparent;
+}
+
+.ag-btn--gradient-warning {
+  background: var(--ag-gradient-warning);
+  color: var(--ag-white);
+  border-color: transparent;
+}
+
+.ag-btn--gradient-danger {
+  background: var(--ag-gradient-danger);
+  color: var(--ag-white);
+  border-color: transparent;
+}
+
+.ag-btn--gradient-default {
+  background: var(--ag-gradient-default);
+  color: var(--ag-white);
+  border-color: transparent;
+}
+
+.ag-btn--social-github {
+  background: var(--ag-social-github);
+  color: var(--ag-white);
+  border-color: var(--ag-social-github);
+}
+
+.ag-btn--social-google {
+  background: var(--ag-social-google);
+  color: var(--ag-white);
+  border-color: var(--ag-social-google);
+}
+
+.ag-btn--social-wechat {
+  background: var(--ag-social-wechat);
+  color: var(--ag-white);
+  border-color: var(--ag-social-wechat);
+}
+
+.ag-btn--social-facebook {
+  background: var(--ag-social-facebook);
+  color: var(--ag-white);
+  border-color: var(--ag-social-facebook);
+}
+
+.ag-btn--social-twitter {
+  background: var(--ag-social-twitter);
+  color: var(--ag-white);
+  border-color: var(--ag-social-twitter);
+}
+
+.ag-btn--social-pinterest {
+  background: var(--ag-social-pinterest);
+  color: var(--ag-white);
+  border-color: var(--ag-social-pinterest);
+}
+
+.ag-btn--social-linkedin {
+  background: var(--ag-social-linkedin);
+  color: var(--ag-white);
+  border-color: var(--ag-social-linkedin);
+}
+
+.ag-btn--social-dribbble {
+  background: var(--ag-social-dribbble);
+  color: var(--ag-white);
+  border-color: var(--ag-social-dribbble);
+}
+
+.ag-btn--social-youtube {
+  background: var(--ag-social-youtube);
+  color: var(--ag-white);
+  border-color: var(--ag-social-youtube);
+}
+
+.ag-btn--social-instagram {
+  background: var(--ag-social-instagram);
+  color: var(--ag-white);
+  border-color: var(--ag-social-instagram);
+}
+
+.ag-btn--social-reddit {
+  background: var(--ag-social-reddit);
+  color: var(--ag-white);
+  border-color: var(--ag-social-reddit);
+}
+
+.ag-btn--social-tumblr {
+  background: var(--ag-social-tumblr);
+  color: var(--ag-white);
+  border-color: var(--ag-social-tumblr);
+}
+
+.ag-btn--social-behance {
+  background: var(--ag-social-behance);
+  color: var(--ag-white);
+  border-color: var(--ag-social-behance);
+}
+
+.ag-btn--social-vimeo {
+  background: var(--ag-social-vimeo);
+  color: var(--ag-white);
+  border-color: var(--ag-social-vimeo);
+}
+
+.ag-btn--social-slack {
+  background: var(--ag-social-slack);
+  color: var(--ag-white);
+  border-color: var(--ag-social-slack);
+}
+
+.ag-btn__icon,
+.ag-btn__spinner {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+
+.ag-btn__spinner {
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: ag-spin 0.6s linear infinite;
+}
+
+.ag-btn--loading {
+  pointer-events: none;
+}
+
+@keyframes ag-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

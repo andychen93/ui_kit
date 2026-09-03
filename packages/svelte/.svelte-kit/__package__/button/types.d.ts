@@ -1,0 +1,2 @@
+export type ButtonVariant = "primary" | "info" | "success" | "warning" | "danger" | "default" | "neutral" | "outline" | "link" | "gradient-primary" | "gradient-info" | "gradient-success" | "gradient-warning" | "gradient-danger" | "gradient-default" | "social-github" | "social-google" | "social-wechat" | "social-facebook" | "social-twitter" | "social-pinterest" | "social-linkedin" | "social-dribbble" | "social-youtube" | "social-instagram" | "social-reddit" | "social-tumblr" | "social-behance" | "social-vimeo" | "social-slack";
+export type ButtonSize = "sm" | "md" | "lg";

@@ -1,0 +1,22 @@
+{
+  "name": "@argon-kit/styles",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.css",
+    "./tokens.css": "./src/tokens.css",
+    "./tokens": "./src/tokens.ts",
+    "./button.css": "./src/button.css",
+    "./form.css": "./src/form.css",
+    "./overlay.css": "./src/overlay.css",
+    "./table.css": "./src/table.css",
+    "./layout.css": "./src/layout.css",
+    "./display.css": "./src/display.css",
+    "./feedback.css": "./src/feedback.css",
+    "./vendors.css": "./src/vendors.css"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "scripts": {}
+}

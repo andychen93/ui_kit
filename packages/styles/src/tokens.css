@@ -1,0 +1,71 @@
+:root {
+  /* @generated:palette:begin */
+  --ag-primary: #5e72e4;
+  --ag-info: #11cdef;
+  --ag-success: #2dce89;
+  --ag-warning: #fb6340;
+  --ag-danger: #f5365c;
+  --ag-default: #172b4d;
+  --ag-white: #ffffff;
+  --ag-body-bg: #f8f9fe;
+  --ag-gray-100: #f6f9fc;
+  --ag-gray-200: #e9ecef;
+  --ag-gray-300: #dee2e6;
+  --ag-gray-400: #ced4da;
+  --ag-gray-500: #adb5bd;
+  --ag-gray-600: #8898aa;
+  --ag-gray-700: #525f7f;
+  --ag-gray-800: #32325d;
+  --ag-gray-900: #212529;
+  --ag-text: var(--ag-gray-700);
+  --ag-heading: var(--ag-gray-800);
+/* @generated:palette:end */
+
+  --ag-gradient-primary: linear-gradient(87deg, #5e72e4 0%, #7b5ce4 100%);
+  --ag-gradient-info: linear-gradient(87deg, #11cdef 0%, #118def 100%);
+  --ag-gradient-success: linear-gradient(87deg, #2dce89 0%, #2dc7ce 100%);
+  --ag-gradient-warning: linear-gradient(87deg, #fb6340 0%, #fb9840 100%);
+  --ag-gradient-danger: linear-gradient(87deg, #f5365c 0%, #f56336 100%);
+  --ag-gradient-default: linear-gradient(87deg, #172b4d 0%, #24174d 100%);
+
+  --ag-social-github: #222;
+  --ag-social-google: #dd4b39;
+  --ag-social-wechat: #07c160;
+  --ag-social-facebook: #3b5998;
+  --ag-social-twitter: #55acee;
+  --ag-social-pinterest: #cc2127;
+  --ag-social-linkedin: #0077b5;
+  --ag-social-dribbble: #ea4c89;
+  --ag-social-youtube: #e52d27;
+  --ag-social-instagram: #125688;
+  --ag-social-reddit: #ff4500;
+  --ag-social-tumblr: #35465c;
+  --ag-social-behance: #1769ff;
+  --ag-social-vimeo: #1ab7ea;
+  --ag-social-slack: #3aaf85;
+
+  --ag-font-family: "Open Sans", "PingFang SC", system-ui, sans-serif;
+  --ag-font-size: 16px;
+  --ag-font-size-label: 13px;
+  --ag-font-size-title: 20px;
+  --ag-font-weight-btn: 600;
+
+  --ag-radius: 4px;
+  --ag-radius-card: 6px;
+  --ag-control-height: 40px;
+  --ag-control-height-sm: 32px;
+  --ag-control-height-lg: 48px;
+
+  --ag-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  --ag-shadow-card: 0 0 2rem 0 rgba(136, 152, 170, 0.15);
+
+  --ag-sidebar-mini: 62px;
+  --ag-sidebar-open: 250px;
+  --ag-header-height: 64px;
+  --ag-z-tooltip: 1060;
+  --ag-z-datepicker: 1050;
+  --ag-z-modal: 1080;
+  --ag-z-drawer: 1081;
+  --ag-z-swal: 1082;
+  --ag-z-notification: 1090;
+}

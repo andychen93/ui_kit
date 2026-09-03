@@ -1,0 +1,21 @@
+{
+  "name": "@argon-kit/playground-svelte",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5175",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@argon-kit/styles": "workspace:*",
+    "@argon-kit/svelte": "workspace:*",
+    "lucide-svelte": "^0.469.0",
+    "svelte": "^5.16.0"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "typescript": "^5.6.3",
+    "vite": "^6.4.3"
+  }
+}
