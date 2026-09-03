@@ -6,3 +6,4 @@ dist
 coverage
 *.tsbuildinfo
 .playwright-mcp/
+.svelte-kit/
