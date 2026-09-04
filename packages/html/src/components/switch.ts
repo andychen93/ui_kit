@@ -56,7 +56,7 @@ export class Switch {
 
   private createSwitchButton(): HTMLDivElement {
     const switchButton = dom.createElement('div', {
-      className: 'ag-switch-button',
+      className: this.checked ? 'ag-switch-button ag-switch-button--checked' : 'ag-switch-button',
       attributes: {
         role: 'switch',
         'aria-checked': String(this.checked),

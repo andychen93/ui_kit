@@ -365,8 +365,11 @@ export class Popconfirm {
 }
 
 /**
- * Create popconfirm from scratch
+ * Attach a popconfirm to a target element (or selector).
  */
-export function createPopconfirm(options: PopconfirmOptions): Popconfirm {
-  throw new Error('Popconfirm requires a target element');
+export function createPopconfirm(
+  target: HTMLElement | string,
+  options: PopconfirmOptions = {}
+): Popconfirm {
+  return new Popconfirm(target, options);
 }

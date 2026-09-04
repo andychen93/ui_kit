@@ -267,8 +267,11 @@ export class Popover {
 }
 
 /**
- * Create popover from scratch
+ * Attach a popover to a target element (or selector).
  */
-export function createPopover(options: PopoverOptions): Popover {
-  throw new Error('Popover requires a target element');
+export function createPopover(
+  target: HTMLElement | string,
+  options: PopoverOptions = {}
+): Popover {
+  return new Popover(target, options);
 }
