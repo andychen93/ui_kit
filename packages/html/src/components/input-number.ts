@@ -53,7 +53,18 @@ export class InputNumber {
     this.createIncrementButton();
     this.updateClasses();
     this.applyAttributes();
+    this.applyButtonDisabledState();
     this.bindEvents();
+  }
+
+  private applyButtonDisabledState(): void {
+    const disabled = !!this.options.disabled;
+    if (this.incrementButton) {
+      this.incrementButton.disabled = disabled;
+    }
+    if (this.decrementButton) {
+      this.decrementButton.disabled = disabled;
+    }
   }
 
   private createInput(): void {

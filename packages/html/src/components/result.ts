@@ -98,12 +98,17 @@ export class Result {
   }
 
   /**
-   * Set icon
+   * Set icon. When switching to 'custom', the last HTML passed to
+   * `setCustomIcon()` (or the constructor's `customIcon` option) is
+   * reused. Prefer `setCustomIcon(html)` when you have new HTML to show.
    */
   setIcon(icon: 'success' | 'error' | 'warning' | 'info' | 'custom'): void {
     this.options.icon = icon;
     if (this.iconElement) {
-      this.iconElement.innerHTML = this.getIconHTML();
+      this.iconElement.innerHTML =
+        icon === 'custom' && this.options.customIcon
+          ? this.options.customIcon
+          : this.getIconHTML();
     }
   }
 

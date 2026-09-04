@@ -17,6 +17,8 @@
 import * as dom from '../utils/dom';
 import { EventManager } from '../utils/event';
 
+let formIdCounter = 0;
+
 export type CrudFormMode = 'create' | 'edit';
 
 export interface CrudFormFieldOptions {
@@ -130,7 +132,7 @@ export class CrudFormModal {
 
     const form = dom.createElement('form', {
       className: 'ag-form',
-      attributes: { novalidate: 'novalidate' },
+      attributes: { novalidate: 'novalidate', id: `ag-crud-form-${++formIdCounter}` },
     });
 
     this.fields.forEach((field) => {
@@ -187,7 +189,7 @@ export class CrudFormModal {
     this.cancelButton = cancelBtn;
 
     const okBtn = dom.createElement('button', {
-      attributes: { type: 'submit' },
+      attributes: { type: 'submit', form: this.formElement?.id },
       className: 'ag-btn ag-btn--primary',
       textContent: this.options.okText,
     });

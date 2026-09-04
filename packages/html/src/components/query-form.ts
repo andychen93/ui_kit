@@ -16,6 +16,8 @@
 import * as dom from '../utils/dom';
 import { EventManager } from '../utils/event';
 
+let formIdCounter = 0;
+
 export interface QueryFormItem {
   name: string;
   label?: string;
@@ -82,7 +84,7 @@ export class QueryForm {
   private createForm(): void {
     const form = dom.createElement('form', {
       className: 'ag-query-form-body',
-      attributes: { novalidate: 'novalidate' },
+      attributes: { novalidate: 'novalidate', id: `ag-query-form-${++formIdCounter}` },
     });
 
     if (this.collapsed) {
@@ -148,7 +150,7 @@ export class QueryForm {
     const searchBtn = dom.createElement('button', {
       className: 'ag-btn ag-btn--primary ag-btn--sm',
       textContent: 'Search',
-      attributes: { type: 'submit' },
+      attributes: { type: 'submit', form: this.formElement?.id },
     });
     actions.appendChild(searchBtn);
     this.searchButton = searchBtn;
