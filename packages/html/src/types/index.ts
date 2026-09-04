@@ -6,7 +6,7 @@ export type ComponentSize = 'sm' | 'md' | 'lg';
 /**
  * Common component color variants
  */
-export type ComponentVariant = 
+export type ComponentVariant =
   | 'primary'
   | 'secondary'
   | 'success'

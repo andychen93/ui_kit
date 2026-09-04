@@ -1,5 +1,5 @@
 /**
- * Transfer component
+ * Transfer component - move items between two lists (source/target).
  */
 
 import * as dom from '../utils/dom';
@@ -10,329 +10,261 @@ export interface TransferItem {
   title?: string;
   description?: string;
   checked?: boolean;
+  disabled?: boolean;
   className?: string;
 }
 
 export interface TransferOptions {
   dataSource?: TransferItem[];
-  selectedKeys?: string[];
-  onChange?: (selectedKeys: string[]) => void;
+  /** Keys that start on the target (right) side */
+  targetKeys?: string[];
+  onChange?: (targetKeys: string[]) => void;
   className?: string;
+}
+
+interface InternalItem extends TransferItem {
+  element: HTMLDivElement;
 }
 
 export class Transfer {
   private element: HTMLDivElement;
   private options: TransferOptions;
-  private sourceList: HTMLDivElement | null;
-  private targetList: HTMLDivElement | null;
-  private sourceItems: Map<string, HTMLDivElement> = new Map();
-  private targetItems: Map<string, HTMLDivElement> = new Map();
+  private sourceList: HTMLDivElement;
+  private targetList: HTMLDivElement;
+  private moveRightButton: HTMLButtonElement;
+  private moveLeftButton: HTMLButtonElement;
   private eventManager = new EventManager();
+
+  private sourceItems: Map<string, InternalItem> = new Map();
+  private targetItems: Map<string, InternalItem> = new Map();
 
   constructor(
     element: HTMLDivElement | string,
     options: TransferOptions = {}
   ) {
     this.element = dom.getElement<HTMLDivElement>(element);
-    this.options = {
-      selectedKeys: [],
-      ...options,
-    };
-    this.init();
-  }
+    this.options = { ...options };
 
-  private init(): void {
-    this.createLayout();
-    this.processItems();
-    this.bindEvents();
-  }
+    this.updateClasses();
 
-  private createLayout(): void {
-    // Header
     const header = dom.createElement('div', {
       className: 'ag-transfer-header',
     });
-
-    const sourceTitle = dom.createElement('div', {
-      className: 'ag-transfer-title',
-      textContent: 'Available',
-    });
-    header.appendChild(sourceTitle);
-
-    const targetTitle = dom.createElement('div', {
-      className: 'ag-transfer-title',
-      textContent: 'Selected',
-    });
-    header.appendChild(targetTitle);
-
+    header.appendChild(
+      dom.createElement('div', { className: 'ag-transfer-title', textContent: 'Available' })
+    );
+    header.appendChild(
+      dom.createElement('div', { className: 'ag-transfer-title', textContent: 'Selected' })
+    );
     this.element.appendChild(header);
 
-    // Body
     const body = dom.createElement('div', {
       className: 'ag-transfer-body',
     });
 
-    // Source list
-    const sourceContainer = dom.createElement('div', {
+    this.sourceList = dom.createElement('div', {
       className: 'ag-transfer-list ag-transfer-list--source',
     });
-    body.appendChild(sourceContainer);
-    this.sourceList = sourceContainer;
+    body.appendChild(this.sourceList);
 
-    // Buttons
     const buttons = dom.createElement('div', {
       className: 'ag-transfer-buttons',
     });
-
-    const toRightBtn = dom.createElement('button', {
+    this.moveRightButton = dom.createElement('button', {
       className: 'ag-btn ag-btn--sm',
-      textContent: '→',
+      textContent: '\u2192',
+      attributes: { type: 'button' },
     });
-    buttons.appendChild(toRightBtn);
+    buttons.appendChild(this.moveRightButton);
 
-    const toLeftBtn = dom.createElement('button', {
+    this.moveLeftButton = dom.createElement('button', {
       className: 'ag-btn ag-btn--sm',
-      textContent: '←',
+      textContent: '\u2190',
+      attributes: { type: 'button' },
     });
-    buttons.appendChild(toLeftBtn);
-
+    buttons.appendChild(this.moveLeftButton);
     body.appendChild(buttons);
 
-    // Target list
-    const targetContainer = dom.createElement('div', {
+    this.targetList = dom.createElement('div', {
       className: 'ag-transfer-list ag-transfer-list--target',
     });
-    body.appendChild(targetContainer);
-    this.targetList = targetContainer;
+    body.appendChild(this.targetList);
 
     this.element.appendChild(body);
+
+    this.bindEvents();
+    this.setDataSource(this.options.dataSource || [], this.options.targetKeys);
   }
 
-  private processItems(): void {
-    this.options.dataSource?.forEach(item => {
-      this.addItem(item);
-    });
+  private updateClasses(): void {
+    this.element.className = ['ag-transfer', this.options.className].filter(Boolean).join(' ');
   }
 
   private bindEvents(): void {
-    if (this.sourceList) {
-      this.eventManager.on(this.sourceList, 'click', (e) => {
-        this.handleItemClick(e, 'source');
-      });
+    this.eventManager.on<MouseEvent>(this.sourceList, 'click', (e: MouseEvent) => {
+      this.handleItemToggle(e, this.sourceItems);
+    });
+
+    this.eventManager.on<MouseEvent>(this.targetList, 'click', (e: MouseEvent) => {
+      this.handleItemToggle(e, this.targetItems);
+    });
+
+    this.eventManager.on<MouseEvent>(this.moveRightButton, 'click', () =>
+      this.moveChecked(this.sourceItems, this.targetItems, this.sourceList, this.targetList)
+    );
+
+    this.eventManager.on<MouseEvent>(this.moveLeftButton, 'click', () =>
+      this.moveChecked(this.targetItems, this.sourceItems, this.targetList, this.sourceList)
+    );
+  }
+
+  private handleItemToggle(e: MouseEvent, itemsMap: Map<string, InternalItem>): void {
+    const target = e.target as HTMLElement;
+    const row = target.closest('.ag-transfer-item');
+    if (!(row instanceof HTMLElement)) return;
+
+    const key = row.dataset.key || '';
+    const item = itemsMap.get(key);
+    if (!item || item.disabled) return;
+
+    const checkbox = row.querySelector('.ag-transfer-checkbox');
+    if (!(checkbox instanceof HTMLInputElement)) return;
+
+    // If the click originated on the checkbox itself, its `checked` state
+    // was already toggled by the browser; otherwise toggle manually.
+    if (target !== checkbox) {
+      checkbox.checked = !checkbox.checked;
     }
 
-    if (this.targetList) {
-      this.eventManager.on(this.targetList, 'click', (e) => {
-        this.handleItemClick(e, 'target');
-      });
-    }
+    item.checked = checkbox.checked;
+    row.classList.toggle('ag-transfer-item--checked', checkbox.checked);
+  }
 
-    if (this.sourceList && this.targetList) {
-      // To right button
-      const toRightBtn = this.element.querySelector('.ag-transfer-buttons button:first-child');
-      if (toRightBtn) {
-        this.eventManager.on(toRightBtn, 'click', () => this.moveItems('source', 'target'));
-      }
+  private moveChecked(
+    fromMap: Map<string, InternalItem>,
+    toMap: Map<string, InternalItem>,
+    fromList: HTMLDivElement,
+    toList: HTMLDivElement
+  ): void {
+    const toMove = Array.from(fromMap.values()).filter((item) => item.checked && !item.disabled);
 
-      // To left button
-      const toLeftBtn = this.element.querySelector('.ag-transfer-buttons button:last-child');
-      if (toLeftBtn) {
-        this.eventManager.on(toLeftBtn, 'click', () => this.moveItems('target', 'source'));
+    toMove.forEach((item) => {
+      fromMap.delete(item.key);
+      item.checked = false;
+      item.element.classList.remove('ag-transfer-item--checked');
+      const checkbox = item.element.querySelector('.ag-transfer-checkbox');
+      if (checkbox instanceof HTMLInputElement) {
+        checkbox.checked = false;
       }
+      fromList.removeChild(item.element);
+      toMap.set(item.key, item);
+      toList.appendChild(item.element);
+    });
+
+    if (toMove.length > 0) {
+      this.emitChange();
     }
   }
 
-  private addItem(item: TransferItem): void {
-    const list = this.sourceList;
-    if (!list) return;
-
-    const li = dom.createElement('div', {
+  private createRow(item: TransferItem): InternalItem {
+    const row = dom.createElement('div', {
       className: 'ag-transfer-item',
-      attributes: {
-        'data-key': item.key,
-      },
     });
+    row.dataset.key = item.key;
 
-    if (item.checked) {
-      li.classList.add('ag-transfer-item--checked');
+    if (item.disabled) {
+      row.classList.add('ag-transfer-item--disabled');
     }
 
     const checkbox = dom.createElement('input', {
-      type: 'checkbox',
       className: 'ag-transfer-checkbox',
+      attributes: {
+        type: 'checkbox',
+        disabled: item.disabled ? 'disabled' : undefined,
+      },
     });
-    if (item.checked) {
-      checkbox.checked = true;
-    }
-    li.appendChild(checkbox);
+    checkbox.checked = !!item.checked;
+    row.appendChild(checkbox);
 
     const label = dom.createElement('label', {
       className: 'ag-transfer-label',
-      textContent: item.title || '',
+      textContent: item.title || item.key,
     });
-    li.appendChild(label);
+    row.appendChild(label);
 
     if (item.description) {
-      const desc = dom.createElement('div', {
-        className: 'ag-transfer-description',
-        textContent: item.description,
-      });
-      li.appendChild(desc);
+      row.appendChild(
+        dom.createElement('div', {
+          className: 'ag-transfer-description',
+          textContent: item.description,
+        })
+      );
     }
 
-    list.appendChild(li);
-    this.sourceItems.set(item.key, li);
-  }
-
-  private handleItemClick(e: MouseEvent, listType: 'source' | 'target'): void {
-    const target = e.target as HTMLElement;
-    const item = target.closest('.ag-transfer-item');
-
-    if (item) {
-      const key = item.dataset.key || '';
-      const checkbox = item.querySelector('.ag-transfer-checkbox') as HTMLInputElement;
-
-      if (checkbox) {
-        checkbox.checked = !checkbox.checked;
-        
-        if (checkbox.checked) {
-          item.classList.add('ag-transfer-item--checked');
-          if (listType === 'source') {
-            this.moveItem(key, 'source', 'target');
-          } else {
-            this.moveItem(key, 'target', 'source');
-          }
-        } else {
-          item.classList.remove('ag-transfer-item--checked');
-          if (listType === 'target') {
-            this.moveItem(key, 'target', 'source');
-          } else {
-            this.moveItem(key, 'source', 'target');
-          }
-        }
-      }
-    }
-  }
-
-  private moveItems(from: 'source' | 'target', to: 'source' | 'target'): void {
-    const fromList = from === 'source' ? this.sourceList : this.targetList;
-    const toList = to === 'source' ? this.sourceList : this.targetList;
-
-    if (!fromList || !toList) return;
-
-    const checkedItems = Array.from(fromList.querySelectorAll('.ag-transfer-item--checked'));
-    
-    checkedItems.forEach(item => {
-      const key = item.dataset.key || '';
-      
-      if (from === 'source' && to === 'target') {
-        this.sourceItems.delete(key);
-        this.targetItems.set(key, item);
-      } else {
-        this.targetItems.delete(key);
-        this.sourceItems.set(key, item);
-      }
-
-      fromList.removeChild(item);
-      toList.appendChild(item);
-    });
-
-    this.updateSelectedKeys();
-  }
-
-  private moveItem(key: string, from: 'source' | 'target', to: 'source' | 'target'): void {
-    const fromList = from === 'source' ? this.sourceList : this.targetList;
-    const toList = to === 'source' ? this.sourceList : this.targetList;
-
-    if (!fromList || !toList) return;
-
-    const item = fromList.querySelector(`.ag-transfer-item[data-key="${key}"]`);
-    if (item) {
-      if (from === 'source' && to === 'target') {
-        this.sourceItems.delete(key);
-        this.targetItems.set(key, item);
-      } else {
-        this.targetItems.delete(key);
-        this.sourceItems.set(key, item);
-      }
-
-      fromList.removeChild(item);
-      toList.appendChild(item);
+    if (item.checked) {
+      row.classList.add('ag-transfer-item--checked');
     }
 
-    this.updateSelectedKeys();
+    return { ...item, element: row };
   }
 
-  private updateSelectedKeys(): void {
-    const selectedKeys: string[] = [];
-    this.targetItems.forEach((_, key) => {
-      selectedKeys.push(key);
-    });
-
-    if (this.options.onChange) {
-      this.options.onChange(selectedKeys);
-    }
+  private emitChange(): void {
+    this.options.onChange?.(this.getTargetKeys());
   }
 
   /**
-   * Add item
+   * Replace the full data source. `targetKeys` (defaults to each item's
+   * own `checked`/pre-existing target membership) decides which items
+   * start on the right side.
    */
-  addItem(item: TransferItem): void {
-    if (!this.sourceList) return;
-    this.addItem(item);
-  }
-
-  /**
-   * Remove item
-   */
-  removeItem(key: string): void {
-    const item = this.targetItems.get(key);
-    if (item) {
-      this.targetItems.delete(key);
-      this.sourceItems.set(key, item);
-      
-      if (this.targetList) {
-        this.targetList.removeChild(item);
-      }
-      if (this.sourceList) {
-        this.sourceList.appendChild(item);
-      }
-    }
-  }
-
-  /**
-   * Get selected keys
-   */
-  getSelectedKeys(): string[] {
-    const keys: string[] = [];
-    this.targetItems.forEach((_, key) => {
-      keys.push(key);
-    });
-    return keys;
-  }
-
-  /**
-   * Set data source
-   */
-  setDataSource(dataSource: TransferItem[]): void {
-    // Clear existing items
-    this.sourceItems.forEach(item => {
-      if (this.sourceList) {
-        this.sourceList.removeChild(item);
-      }
-    });
-    this.targetItems.forEach(item => {
-      if (this.targetList) {
-        this.targetList.removeChild(item);
-      }
-    });
+  setDataSource(dataSource: TransferItem[], targetKeys?: string[]): void {
+    this.sourceItems.forEach((item) => item.element.remove());
+    this.targetItems.forEach((item) => item.element.remove());
     this.sourceItems.clear();
     this.targetItems.clear();
 
-    // Add new items
-    dataSource.forEach(item => {
-      this.addItem(item);
+    const targetKeySet = new Set(targetKeys || []);
+
+    dataSource.forEach((item) => {
+      const isTarget = targetKeySet.has(item.key);
+      const row = this.createRow({ ...item, checked: false });
+
+      if (isTarget) {
+        this.targetItems.set(item.key, row);
+        this.targetList.appendChild(row.element);
+      } else {
+        this.sourceItems.set(item.key, row);
+        this.sourceList.appendChild(row.element);
+      }
     });
+  }
+
+  /**
+   * Get keys currently on the target (right) side
+   */
+  getTargetKeys(): string[] {
+    return Array.from(this.targetItems.keys());
+  }
+
+  /**
+   * Get keys currently on the source (left) side
+   */
+  getSourceKeys(): string[] {
+    return Array.from(this.sourceItems.keys());
+  }
+
+  /**
+   * Set disabled state for a specific item by key
+   */
+  setItemDisabled(key: string, disabled: boolean): void {
+    const item = this.sourceItems.get(key) || this.targetItems.get(key);
+    if (!item) return;
+    item.disabled = disabled;
+    item.element.classList.toggle('ag-transfer-item--disabled', disabled);
+    const checkbox = item.element.querySelector('.ag-transfer-checkbox');
+    if (checkbox instanceof HTMLInputElement) {
+      checkbox.disabled = disabled;
+    }
   }
 
   /**
@@ -347,12 +279,8 @@ export class Transfer {
    */
   destroy(): void {
     this.eventManager.removeAll();
-    this.sourceItems.forEach(item => {
-      item.remove();
-    });
-    this.targetItems.forEach(item => {
-      item.remove();
-    });
+    this.sourceItems.forEach((item) => item.element.remove());
+    this.targetItems.forEach((item) => item.element.remove());
     this.sourceItems.clear();
     this.targetItems.clear();
   }

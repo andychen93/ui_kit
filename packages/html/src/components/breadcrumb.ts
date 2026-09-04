@@ -39,7 +39,7 @@ export class Breadcrumb {
 
   private createItems(): void {
     this.options.items?.forEach((item, index) => {
-      const separator = index > 0 
+      const separator = index > 0
         ? dom.createElement('span', {
             className: 'ag-breadcrumb-separator',
             textContent: this.options.separator,
@@ -115,7 +115,7 @@ export class Breadcrumb {
     if (index >= 0 && index < this.items.length) {
       const item = this.items[index];
       item.remove();
-      
+
       // Also remove the separator before this item
       const prevItem = this.items[index - 1];
       if (prevItem) {
@@ -124,7 +124,7 @@ export class Breadcrumb {
           separator.remove();
         }
       }
-      
+
       this.items.splice(index, 1);
     }
   }

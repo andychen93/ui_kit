@@ -1,17 +1,17 @@
 {
-    "name": "argon-ui-kit",
-    "private": true,
-    "packageManager": "pnpm@8.6.12",
-    "scripts": {
-        "dev:docs": "pnpm --filter @argon-kit/docs dev",
-        "dev:html": "pnpm --filter @argon-kit/playground-html dev",
-        "dev:react": "pnpm --filter @argon-kit/playground-react dev",
-        "dev:vue": "pnpm --filter @argon-kit/playground-vue dev",
-        "dev:svelte": "pnpm --filter @argon-kit/playground-svelte dev",
-        "docs:build": "pnpm --filter @argon-kit/docs build",
-        "test": "pnpm -r --if-present test",
-        "typecheck": "pnpm -r --if-present typecheck",
-        "gen:tokens": "node packages/styles/scripts/generate-tokens.mjs",
-        "build": "pnpm -r --if-present build"
-    }
+  "name": "argon-ui-kit",
+  "private": true,
+  "packageManager": "pnpm@8.6.12",
+  "scripts": {
+    "dev:docs": "pnpm --filter @argon-kit/docs dev",
+    "docs:build": "pnpm --filter @argon-kit/docs build",
+    "dev:react": "pnpm --filter @argon-kit/playground-react dev",
+    "dev:vue": "pnpm --filter @argon-kit/playground-vue dev",
+    "dev:svelte": "pnpm --filter @argon-kit/playground-svelte dev",
+    "dev:html": "pnpm --filter @argon-kit/playground-html dev",
+    "test": "pnpm -r --if-present test",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "gen:tokens": "node packages/styles/scripts/generate-tokens.mjs",
+    "build": "pnpm -r --if-present build"
+  }
 }

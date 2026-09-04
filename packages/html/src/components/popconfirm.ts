@@ -55,7 +55,7 @@ export class Popconfirm {
     const contentDiv = dom.createElement('div', {
       className: 'ag-popconfirm-content',
     });
-    
+
     if (this.options.title) {
       const header = dom.createElement('div', {
         className: 'ag-popconfirm-header',
@@ -63,7 +63,7 @@ export class Popconfirm {
       });
       contentDiv.appendChild(header);
     }
-    
+
     if (this.options.description) {
       const body = dom.createElement('div', {
         className: 'ag-popconfirm-body',
@@ -71,33 +71,33 @@ export class Popconfirm {
       });
       contentDiv.appendChild(body);
     }
-    
+
     // Action buttons
     const footer = dom.createElement('div', {
       className: 'ag-popconfirm-actions',
     });
-    
+
     const cancelBtn = dom.createElement('button', {
       className: 'ag-btn ag-btn--sm',
       textContent: this.options.cancelText,
     });
     footer.appendChild(cancelBtn);
     this.cancelButton = cancelBtn;
-    
+
     const okBtn = dom.createElement('button', {
       className: 'ag-btn ag-btn--sm ag-btn--primary',
       textContent: this.options.okText,
     });
     footer.appendChild(okBtn);
     this.confirmButton = okBtn;
-    
+
     contentDiv.appendChild(footer);
-    
+
     // Arrow
     const arrow = dom.createElement('div', {
       className: 'ag-popconfirm-arrow',
     });
-    
+
     this.element = dom.createElement('div', {
       className: 'ag-popconfirm',
       attributes: {
@@ -108,7 +108,7 @@ export class Popconfirm {
     });
     this.element.appendChild(arrow);
     this.element.appendChild(contentDiv);
-    
+
     document.body.appendChild(this.element);
   }
 
@@ -155,8 +155,8 @@ export class Popconfirm {
 
     // Hide on document click outside
     this.eventManager.on(document, 'click', (e: MouseEvent) => {
-      if (this.visible && 
-          e.target !== this.target && 
+      if (this.visible &&
+          e.target !== this.target &&
           !this.element.contains(e.target as Node) &&
           !this.target.contains(e.target as Node)) {
         this.hide();
@@ -169,11 +169,11 @@ export class Popconfirm {
    */
   show(): void {
     if (this.visible || this.options.disabled) return;
-    
+
     this.visible = true;
     this.element.style.display = 'block';
     this.position();
-    
+
     if (this.options.onVisibleChange) {
       this.options.onVisibleChange(true);
     }
@@ -184,10 +184,10 @@ export class Popconfirm {
    */
   hide(): void {
     if (!this.visible) return;
-    
+
     this.visible = false;
     this.element.style.display = 'none';
-    
+
     if (this.options.onVisibleChange) {
       this.options.onVisibleChange(false);
     }
@@ -231,19 +231,19 @@ export class Popconfirm {
     const targetRect = this.target.getBoundingClientRect();
     const popconfirmRect = this.element.getBoundingClientRect();
     const arrow = this.element.querySelector('.ag-popconfirm-arrow');
-    
+
     const gap = 8;
     const arrowSize = 8;
 
     this.element.style.top = `${targetRect.top + (targetRect.height - popconfirmRect.height) / 2}px`;
     this.element.style.left = `${targetRect.right + gap}px`;
-    
+
     this.element.className = popconfirmClasses({
       variant: this.options.variant,
       title: !!this.options.title,
       className: this.options.className,
     });
-    
+
     if (arrow) {
       arrow.className = 'ag-popconfirm-arrow ag-popconfirm-arrow--left';
     }
@@ -255,7 +255,7 @@ export class Popconfirm {
   setTitle(title: string): void {
     this.options.title = title;
     const header = this.element.querySelector('.ag-popconfirm-header');
-    
+
     if (title) {
       if (!header) {
         const headerEl = dom.createElement('div', {
@@ -272,7 +272,7 @@ export class Popconfirm {
     } else if (header) {
       header.remove();
     }
-    
+
     this.updateClasses();
   }
 

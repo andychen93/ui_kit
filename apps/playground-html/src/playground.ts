@@ -364,21 +364,21 @@ if (calendarContainer) {
 if (import.meta.hot) {
     import.meta.hot.accept((newModule) => {
         console.log('HMR detected, cleaning up instances...');
-        
+
         // Destroy chart instances
         if (chartsInstance) {
             Object.values(chartsInstance).forEach((chart: any) => {
                 if (chart.destroy) chart.destroy();
             });
         }
-        
+
         // Destroy other instances
         if (uploadInstance && uploadInstance.destroy) uploadInstance.destroy();
         if (datePickerInstance && datePickerInstance.destroy) datePickerInstance.destroy();
         if (dateRangePickerInstance && dateRangePickerInstance.destroy) dateRangePickerInstance.destroy();
         if (editorInstance && editorInstance.destroy) editorInstance.destroy();
         if (calendarInstance && calendarInstance.destroy) calendarInstance.destroy();
-        
+
         console.log('Cleanup complete');
     });
 }

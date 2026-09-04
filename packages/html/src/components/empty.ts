@@ -50,7 +50,7 @@ export class Empty {
 
   private getEmptySVG(type: string): string {
     const colors = ['#f5f5f5', '#e0e0e0'];
-    
+
     switch (type) {
       case 'error':
         return `<svg viewBox="0 0 24 24" width="64" height="64"><path fill="${colors[0]}" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`;
@@ -86,7 +86,7 @@ export class Empty {
    */
   setImage(image: 'empty' | 'error' | 'network' | 'noData'): void {
     this.options.image = image;
-    
+
     if (this.imageElement) {
       const svg = this.getEmptySVG(image);
       this.imageElement.innerHTML = svg;

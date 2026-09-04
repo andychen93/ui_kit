@@ -111,18 +111,18 @@ export class Textarea {
     if (!this.options.autoSize) return;
 
     this.element.style.height = 'auto';
-    const minRows = this.options.autoSize === true 
-      ? 1 
+    const minRows = this.options.autoSize === true
+      ? 1
       : this.options.autoSize.minRows || 1;
-    const maxRows = this.options.autoSize === true 
-      ? Infinity 
+    const maxRows = this.options.autoSize === true
+      ? Infinity
       : this.options.autoSize.maxRows || Infinity;
 
     const rows = Math.min(
       maxRows,
       Math.max(minRows, Math.floor(this.element.scrollHeight / 20))
     );
-    
+
     this.element.style.height = `${Math.max(minRows, rows) * 20}px`;
   }
 

@@ -102,7 +102,7 @@ export class Alert {
   close(): void {
     this.element.style.opacity = '0';
     this.element.style.transition = 'opacity 0.3s ease';
-    
+
     setTimeout(() => {
       if (this.element.parentNode) {
         this.element.parentNode.removeChild(this.element);

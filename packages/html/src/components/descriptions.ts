@@ -118,7 +118,7 @@ export class Descriptions {
   setTitle(title: string): void {
     this.options.title = title;
     const header = this.element.querySelector('.ag-descriptions-header');
-    
+
     if (title) {
       if (!header) {
         this.createHeader();

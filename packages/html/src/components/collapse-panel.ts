@@ -105,7 +105,7 @@ export class CollapsePanel {
     this.options.extra = extra;
     if (this.headerElement) {
       const extraEl = this.headerElement.querySelector('.ag-collapse-header-extra');
-      
+
       if (extra) {
         if (!extraEl) {
           const newExtra = dom.createElement('div', {

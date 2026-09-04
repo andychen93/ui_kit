@@ -21,7 +21,7 @@ npm install @argon-kit/html @argon-kit/styles
 
   <script type="module">
     import { Button } from '@argon-kit/html';
-    
+
     const btn = new Button('#my-button', {
       variant: 'primary',
       size: 'md',
@@ -56,7 +56,7 @@ npm install @argon-kit/html @argon-kit/styles
 
   <script type="module">
     import { Input } from '@argon-kit/html';
-    
+
     const input = new Input('#my-input', {
       size: 'md',
       onChange: (value) => {
@@ -97,7 +97,7 @@ npm install @argon-kit/html @argon-kit/styles
 
   <script type="module">
     import { Input, Button } from '@argon-kit/html';
-    
+
     const email = new Input('#email', {
       type: 'email',
       required: true
@@ -147,7 +147,7 @@ npm install @argon-kit/html @argon-kit/styles
 
   <script type="module">
     import { Checkbox } from '@argon-kit/html';
-    
+
     const checkbox = new Checkbox('#agree', {
       label: 'I agree to terms',
       onChange: (checked) => {
@@ -185,7 +185,7 @@ npm install @argon-kit/html @argon-kit/styles
 
   <script type="module">
     import { createRadioGroup } from '@argon-kit/html';
-    
+
     const radioGroup = createRadioGroup({
       name: 'color',
       options: [
@@ -224,7 +224,7 @@ npm install @argon-kit/html @argon-kit/styles
 
   <script type="module">
     import { Select } from '@argon-kit/html';
-    
+
     const select = new Select('#my-select', {
       size: 'md',
       placeholder: 'Choose an option',
@@ -267,7 +267,7 @@ npm install @argon-kit/html @argon-kit/styles
 
   <script type="module">
     import { createButton, createInput, createCheckbox } from '@argon-kit/html';
-    
+
     // Create button from scratch
     const button = createButton({
       text: 'Click Me',

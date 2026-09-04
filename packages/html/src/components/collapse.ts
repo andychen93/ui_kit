@@ -38,7 +38,7 @@ export class Collapse {
 
   private processPanels(): void {
     this.panels = Array.from(this.element.children).filter(
-      (el): el is HTMLDivElement => 
+      (el): el is HTMLDivElement =>
         el instanceof HTMLElement && el.classList.contains('ag-collapse-panel')
     );
   }
@@ -56,7 +56,7 @@ export class Collapse {
 
   private togglePanel(panel: HTMLDivElement): void {
     const isActive = panel.classList.contains('ag-collapse-panel--active');
-    
+
     if (this.options.accordion) {
       // Close all other panels first
       this.panels.forEach(p => {
@@ -70,7 +70,7 @@ export class Collapse {
         }
       });
     }
-    
+
     if (isActive) {
       // Close this panel
       panel.classList.remove('ag-collapse-panel--active');

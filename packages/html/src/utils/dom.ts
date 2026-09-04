@@ -433,18 +433,18 @@ export function getFormValues(formElement: HTMLFormElement): Record<string, any>
   // Process each group
   Object.entries(elementsByName).forEach(([name, elements]) => {
     // Check if all elements are radio buttons (same name, type=radio)
-    const allRadio = elements.every(el => 
+    const allRadio = elements.every(el =>
       el instanceof HTMLInputElement && el.type === 'radio'
     );
 
     // Check if any element is a checkbox
-    const hasCheckbox = elements.some(el => 
+    const hasCheckbox = elements.some(el =>
       el instanceof HTMLInputElement && el.type === 'checkbox'
     );
 
     if (allRadio) {
       // Radio group: return only checked value
-      const checked = elements.find(el => 
+      const checked = elements.find(el =>
         el instanceof HTMLInputElement && el.checked
       );
       if (checked) {
@@ -484,12 +484,12 @@ export function setFormValues(formElement: HTMLFormElement, data: Record<string,
     if (elements.length === 0) return;
 
     // Check if all elements are radio buttons
-    const allRadio = elements.every(el => 
+    const allRadio = elements.every(el =>
       el instanceof HTMLInputElement && el.type === 'radio'
     );
 
     // Check if any element is a checkbox
-    const hasCheckbox = elements.some(el => 
+    const hasCheckbox = elements.some(el =>
       el instanceof HTMLInputElement && el.type === 'checkbox'
     );
 

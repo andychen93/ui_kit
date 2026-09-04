@@ -54,10 +54,12 @@ export class Steps {
   }
 
   private updateItemStates(): void {
+    const current = this.options.current ?? 0;
+
     this.items.forEach((item, index) => {
-      const isCurrent = index === this.options.current;
-      const isFinished = index < this.options.current;
-      
+      const isCurrent = index === current;
+      const isFinished = index < current;
+
       let status: 'wait' | 'process' | 'finish' | 'error';
       if (isFinished) {
         status = 'finish';

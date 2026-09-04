@@ -45,7 +45,7 @@ export class AvatarGroup {
 
     avatarElements.forEach((el, index) => {
       const avatar = el as HTMLDivElement;
-      
+
       if (index < max) {
         avatar.classList.add('ag-avatar-group-avatar');
         this.avatars.push(avatar);
@@ -102,7 +102,7 @@ export class AvatarGroup {
   removeAvatar(element: HTMLDivElement | string): void {
     const avatar = dom.getElement<HTMLDivElement>(element);
     const index = this.avatars.indexOf(avatar);
-    
+
     if (index > -1) {
       this.avatars.splice(index, 1);
       avatar.classList.remove('ag-avatar-group-avatar');
@@ -157,7 +157,7 @@ export class AvatarGroup {
       avatar.classList.remove('ag-avatar-group-avatar');
       avatar.style.display = '';
     });
-    
+
     const overflow = this.element.querySelector('.ag-avatar-group-overflow');
     if (overflow) {
       overflow.remove();

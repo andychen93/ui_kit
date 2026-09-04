@@ -47,7 +47,7 @@ export class Popover {
     const contentDiv = dom.createElement('div', {
       className: 'ag-popover-content',
     });
-    
+
     if (this.options.title) {
       const header = dom.createElement('div', {
         className: 'ag-popover-header',
@@ -55,18 +55,18 @@ export class Popover {
       });
       contentDiv.appendChild(header);
     }
-    
+
     const body = dom.createElement('div', {
       className: 'ag-popover-body',
       textContent: this.options.content || '',
     });
     contentDiv.appendChild(body);
-    
+
     // Arrow
     const arrow = dom.createElement('div', {
       className: 'ag-popover-arrow',
     });
-    
+
     this.element = dom.createElement('div', {
       className: 'ag-popover',
       attributes: {
@@ -77,7 +77,7 @@ export class Popover {
     });
     this.element.appendChild(arrow);
     this.element.appendChild(contentDiv);
-    
+
     document.body.appendChild(this.element);
   }
 
@@ -120,11 +120,11 @@ export class Popover {
    */
   show(): void {
     if (this.visible || this.options.disabled) return;
-    
+
     this.visible = true;
     this.element.style.display = 'block';
     this.position();
-    
+
     if (this.options.onVisibleChange) {
       this.options.onVisibleChange(true);
     }
@@ -135,10 +135,10 @@ export class Popover {
    */
   hide(): void {
     if (!this.visible) return;
-    
+
     this.visible = false;
     this.element.style.display = 'none';
-    
+
     if (this.options.onVisibleChange) {
       this.options.onVisibleChange(false);
     }
@@ -162,19 +162,19 @@ export class Popover {
     const targetRect = this.target.getBoundingClientRect();
     const popoverRect = this.element.getBoundingClientRect();
     const arrow = this.element.querySelector('.ag-popover-arrow');
-    
+
     const gap = 8;
     const arrowSize = 8;
 
     this.element.style.top = `${targetRect.top + (targetRect.height - popoverRect.height) / 2}px`;
     this.element.style.left = `${targetRect.right + gap}px`;
-    
+
     this.element.className = popoverClasses({
       variant: this.options.variant,
       title: !!this.options.title,
       className: this.options.className,
     });
-    
+
     if (arrow) {
       arrow.className = 'ag-popover-arrow ag-popover-arrow--left';
     }
@@ -196,7 +196,7 @@ export class Popover {
   setTitle(title: string): void {
     this.options.title = title;
     const header = this.element.querySelector('.ag-popover-header');
-    
+
     if (title) {
       if (!header) {
         const headerEl = dom.createElement('div', {
@@ -213,7 +213,7 @@ export class Popover {
     } else if (header) {
       header.remove();
     }
-    
+
     this.updateClasses();
   }
 

@@ -2,13 +2,15 @@
  * Tag component
  */
 
-import { ComponentVariant, ComponentSize, EventHandler } from '../types/index';
+import { ComponentSize } from '../types/index';
 import * as dom from '../utils/dom';
 import { tagClasses } from '../utils/css-classes';
 import { EventManager } from '../utils/event';
 
+export type TagVariant = 'default' | 'primary' | 'info' | 'success' | 'warning' | 'danger';
+
 export interface TagOptions {
-  variant?: ComponentVariant;
+  variant?: TagVariant;
   size?: ComponentSize;
   closeable?: boolean;
   onClose?: () => void;
@@ -18,8 +20,9 @@ export interface TagOptions {
 export class Tag {
   private element: HTMLSpanElement;
   private options: TagOptions;
-  private closeButton: HTMLButtonElement | null;
+  private closeButton: HTMLButtonElement | null = null;
   private eventManager = new EventManager();
+  private closed = false;
 
   constructor(
     element: HTMLSpanElement | string,
@@ -37,10 +40,10 @@ export class Tag {
 
   private init(): void {
     this.updateClasses();
-    this.bindEvents();
     if (this.options.closeable) {
       this.createCloseButton();
     }
+    this.bindEvents();
   }
 
   private createCloseButton(): void {
@@ -48,9 +51,10 @@ export class Tag {
       className: 'ag-tag-close',
       attributes: {
         type: 'button',
-        ariaLabel: 'Close tag',
+        'aria-label': 'Close tag',
       },
-      innerHTML: '<svg viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+      innerHTML:
+        '<svg viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
     });
     this.element.appendChild(button);
     this.closeButton = button;
@@ -73,21 +77,23 @@ export class Tag {
   }
 
   /**
-   * Close the tag
+   * Close the tag: removes it from the DOM, cleans up listeners, and
+   * invokes `onClose`. Safe to call more than once.
    */
   close(): void {
+    if (this.closed) return;
+    this.closed = true;
+    this.destroy();
     if (this.element.parentNode) {
       this.element.parentNode.removeChild(this.element);
     }
-    if (this.options.onClose) {
-      this.options.onClose();
-    }
+    this.options.onClose?.();
   }
 
   /**
    * Set variant
    */
-  setVariant(variant: ComponentVariant): void {
+  setVariant(variant: TagVariant): void {
     this.options.variant = variant;
     this.updateClasses();
   }
@@ -95,7 +101,7 @@ export class Tag {
   /**
    * Get variant
    */
-  getVariant(): ComponentVariant {
+  getVariant(): TagVariant {
     return this.options.variant || 'default';
   }
 
@@ -122,7 +128,9 @@ export class Tag {
   }
 
   /**
-   * Destroy component
+   * Destroy component: removes listeners and the close button (if any),
+   * without removing the tag element itself from the DOM. Use `close()`
+   * to both destroy and remove the element.
    */
   destroy(): void {
     this.eventManager.removeAll();

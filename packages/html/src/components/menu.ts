@@ -52,10 +52,10 @@ export class Menu {
     menuItems.forEach(el => {
       const item = el as HTMLDivElement;
       const key = (item as HTMLElement).dataset.key || '';
-      
+
       if (key) {
         this.items.set(key, item);
-        
+
         // Check if selected
         if (this.options.selectedKeys?.includes(key)) {
           item.classList.add('ag-menu-item--selected');
@@ -69,7 +69,7 @@ export class Menu {
     const handleItemClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const item = target.closest('.ag-menu-item');
-      
+
       if (item && this.options.onClick) {
         const key = (item as HTMLElement).dataset.key || '';
         if (key) {
@@ -82,10 +82,10 @@ export class Menu {
   }
 
   private updateClasses(): void {
-    const modeClass = this.options.mode === 'vertical' 
-      ? 'ag-menu--vertical' 
+    const modeClass = this.options.mode === 'vertical'
+      ? 'ag-menu--vertical'
       : 'ag-menu--horizontal';
-    
+
     this.element.className = `ag-menu ${modeClass}`;
     if (this.options.className) {
       this.element.className += ` ${this.options.className}`;

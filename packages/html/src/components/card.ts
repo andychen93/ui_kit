@@ -121,7 +121,7 @@ export class Card {
   setExtra(extra: string): void {
     this.options.extra = extra;
     const extraEl = this.element.querySelector('.ag-card-extra');
-    
+
     if (extra) {
       if (!extraEl) {
         const header = this.element.querySelector('.ag-card-header');
@@ -154,13 +154,13 @@ export class Card {
   showLoading(): void {
     this.options.loading = true;
     this.updateClasses();
-    
+
     if (!this.loadingElement) {
       this.createLoading();
     } else {
       this.loadingElement.style.display = 'block';
     }
-    
+
     if (this.contentElement) {
       this.contentElement.style.opacity = '0.5';
     }
@@ -172,11 +172,11 @@ export class Card {
   hideLoading(): void {
     this.options.loading = false;
     this.updateClasses();
-    
+
     if (this.loadingElement) {
       this.loadingElement.style.display = 'none';
     }
-    
+
     if (this.contentElement) {
       this.contentElement.style.opacity = '1';
     }
@@ -194,16 +194,16 @@ export class Card {
    */
   destroy(): void {
     this.eventManager.removeAll();
-    
+
     const header = this.element.querySelector('.ag-card-header');
     if (header) {
       header.remove();
     }
-    
+
     if (this.contentElement) {
       this.contentElement.remove();
     }
-    
+
     if (this.loadingElement) {
       this.loadingElement.remove();
     }

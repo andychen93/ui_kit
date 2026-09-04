@@ -27,6 +27,9 @@ export type { SelectOptions, SelectOption } from './components/select';
 export { Form, createForm } from './components/form';
 export type { FormFieldConfig, FormOptions } from './components/form';
 
+export { FormItem, createFormItem } from './components/form-item';
+export type { FormItemOptions } from './components/form-item';
+
 export { Message, showMessage, message } from './components/message';
 export type { MessageOptions } from './components/message';
 
@@ -43,8 +46,15 @@ export type { Column, TableOptions, PaginationOptions } from './components/table
 export { Upload, createUpload } from './components/upload';
 export type { UploadOptions } from './components/upload';
 
-export { DatePicker, DateRangePicker, createDatePicker, createDateRangePicker } from './components/datepicker';
-export type { DatePickerOptions, DateRangePickerOptions } from './components/datepicker';
+export {
+  DatePicker,
+  RangePicker,
+  DateRangePicker,
+  createDatePicker,
+  createRangePicker,
+  createDateRangePicker,
+} from './components/datepicker';
+export type { DatePickerOptions, RangePickerOptions, DateRangePickerOptions } from './components/datepicker';
 
 export { Dropdown, Tree, createTree } from './components/dropdown';
 export type { MenuItem, DropdownOptions, TreeNode, TreeOptions } from './components/dropdown';

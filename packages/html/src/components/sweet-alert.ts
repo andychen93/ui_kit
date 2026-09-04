@@ -24,9 +24,10 @@ export interface SweetAlertOptions {
 export class SweetAlert {
   private element: HTMLDivElement;
   private options: SweetAlertOptions;
-  private confirmButton: HTMLButtonElement | null;
-  private cancelButton: HTMLButtonElement | null;
+  private confirmButton: HTMLButtonElement | null = null;
+  private cancelButton: HTMLButtonElement | null = null;
   private eventManager = new EventManager();
+  private closed = false;
 
   constructor(
     element: HTMLDivElement | string,
@@ -140,30 +141,36 @@ export class SweetAlert {
   private bindEvents(): void {
     if (this.confirmButton) {
       this.eventManager.on(this.confirmButton, 'click', () => {
-        if (this.options.onConfirm) {
-          this.options.onConfirm();
-        }
+        this.options.onConfirm?.();
         this.close();
       });
     }
 
     if (this.cancelButton) {
       this.eventManager.on(this.cancelButton, 'click', () => {
-        if (this.options.onCancel) {
-          this.options.onCancel();
-        }
+        this.options.onCancel?.();
         this.close();
       });
     }
   }
 
   /**
-   * Close the alert
+   * Close the alert and clean up listeners/DOM. Safe to call multiple times.
    */
   close(): void {
+    if (this.closed) return;
+    this.closed = true;
+    this.destroy();
     if (this.element.parentNode) {
       this.element.parentNode.removeChild(this.element);
     }
+  }
+
+  /**
+   * Whether the alert has been closed
+   */
+  isClosed(): boolean {
+    return this.closed;
   }
 
   /**
@@ -201,7 +208,7 @@ export class SweetAlert {
   setType(type: 'success' | 'error' | 'warning' | 'info' | 'question'): void {
     this.options.type = type;
     this.updateClasses();
-    
+
     const icon = this.element.querySelector('.ag-sweet-alert-icon');
     if (icon) {
       icon.innerHTML = this.getIconHTML();
@@ -241,4 +248,45 @@ export function createSweetAlert(options: SweetAlertOptions): SweetAlert {
 
   const instance = new SweetAlert(container, options);
   return instance;
+}
+
+/**
+ * Show a sweet alert attached to `document.body` and resolve a promise
+ * once the user confirms or cancels. Mirrors the common `Swal.fire`-style
+ * API used by React/Vue/Svelte wrappers around SweetAlert2.
+ *
+ * The overlay mask and alert are both removed from the DOM and all
+ * listeners are cleaned up as soon as the promise settles.
+ */
+export function fireSweetAlert(
+  options: SweetAlertOptions
+): Promise<{ confirmed: boolean }> {
+  return new Promise((resolve) => {
+    const mask = dom.createElement('div', {
+      className: 'ag-sweet-alert-mask',
+    });
+
+    let settled = false;
+    const settle = (confirmed: boolean) => {
+      if (settled) return;
+      settled = true;
+      mask.remove();
+      resolve({ confirmed });
+    };
+
+    const instance = createSweetAlert({
+      ...options,
+      onConfirm: () => {
+        options.onConfirm?.();
+        settle(true);
+      },
+      onCancel: () => {
+        options.onCancel?.();
+        settle(false);
+      },
+    });
+
+    mask.appendChild(instance.getElement());
+    document.body.appendChild(mask);
+  });
 }

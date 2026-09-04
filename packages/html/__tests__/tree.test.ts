@@ -94,7 +94,7 @@ describe('Tree Component', () => {
 
       const allLabels = tree.getElement().querySelectorAll('.ag-tree__label');
       expect(allLabels.length).toBe(2);
-      
+
       let foundDisabled = false;
       allLabels.forEach(label => {
         if (label.textContent?.includes('Node 2 (Disabled)')) {

@@ -2,7 +2,7 @@
  * Switch component
  */
 
-import { ComponentSize, ChangeHandler, EventHandler } from '../types/index';
+import { ComponentSize, ChangeHandler } from '../types/index';
 import * as dom from '../utils/dom';
 import { switchClasses } from '../utils/css-classes';
 import { EventManager } from '../utils/event';
@@ -12,7 +12,6 @@ export interface SwitchOptions {
   disabled?: boolean;
   checked?: boolean;
   loading?: boolean;
-  value?: boolean;
   onChange?: ChangeHandler<boolean>;
   className?: string;
 }
@@ -23,6 +22,7 @@ export class Switch {
   private input: HTMLInputElement;
   private options: SwitchOptions;
   private eventManager = new EventManager();
+  private checked: boolean;
 
   constructor(
     element: HTMLDivElement | string,
@@ -34,48 +34,48 @@ export class Switch {
       checked: false,
       ...options,
     };
-    this.init();
-  }
+    this.checked = this.options.checked ?? false;
 
-  private init(): void {
-    this.createInput();
-    this.createSwitchButton();
+    // Both created synchronously below; declared without `| null` since
+    // every code path guarantees assignment before use.
+    this.input = this.createInput();
+    this.switchButton = this.createSwitchButton();
     this.updateClasses();
     this.bindEvents();
   }
 
-  private createInput(): void {
+  private createInput(): HTMLInputElement {
     const input = dom.createElement('input', {
-      type: 'hidden',
       className: 'ag-switch-input',
+      attributes: { type: 'hidden' },
     });
+    input.value = String(this.checked);
     this.element.appendChild(input);
-    this.input = input;
-    this.input.value = String(this.options.checked);
+    return input;
   }
 
-  private createSwitchButton(): void {
+  private createSwitchButton(): HTMLDivElement {
     const switchButton = dom.createElement('div', {
       className: 'ag-switch-button',
       attributes: {
         role: 'switch',
-        'aria-checked': String(this.options.checked),
+        'aria-checked': String(this.checked),
       },
     });
-    
+
     const knob = dom.createElement('div', {
       className: 'ag-switch-knob',
     });
     switchButton.appendChild(knob);
     this.element.appendChild(switchButton);
-    this.switchButton = switchButton;
+    return switchButton;
   }
 
   private updateClasses(): void {
     const classes = switchClasses({
       size: this.options.size,
       disabled: this.options.disabled,
-      checked: this.options.checked,
+      checked: this.checked,
       loading: this.options.loading,
       className: this.options.className,
     });
@@ -83,13 +83,10 @@ export class Switch {
   }
 
   private bindEvents(): void {
-    if (this.switchButton) {
-      if (!this.options.disabled && !this.options.loading) {
-        this.eventManager.on(this.switchButton, 'click', () => {
-          this.toggle();
-        });
-      }
-    }
+    this.eventManager.on(this.switchButton, 'click', () => {
+      if (this.options.disabled || this.options.loading) return;
+      this.toggle();
+    });
   }
 
   /**
@@ -97,9 +94,7 @@ export class Switch {
    */
   toggle(): void {
     if (this.options.disabled || this.options.loading) return;
-    
-    const newChecked = !this.options.checked;
-    this.setValue(newChecked);
+    this.setValue(!this.checked);
   }
 
   /**
@@ -107,15 +102,14 @@ export class Switch {
    */
   setValue(value: boolean): void {
     if (this.options.disabled || this.options.loading) return;
-    
+
+    this.checked = value;
     this.options.checked = value;
     this.input.value = String(value);
-    
-    if (this.switchButton) {
-      this.switchButton.setAttribute('aria-checked', String(value));
-      this.switchButton.classList.toggle('ag-switch-button--checked', value);
-    }
-    
+
+    this.switchButton.setAttribute('aria-checked', String(value));
+    this.switchButton.classList.toggle('ag-switch-button--checked', value);
+
     this.triggerChange();
   }
 
@@ -123,7 +117,7 @@ export class Switch {
    * Get switch value
    */
   getValue(): boolean {
-    return this.options.checked;
+    return this.checked;
   }
 
   /**
@@ -138,7 +132,7 @@ export class Switch {
    * Check if switch is disabled
    */
   isDisabled(): boolean {
-    return this.options.disabled || false;
+    return this.options.disabled ?? false;
   }
 
   /**
@@ -153,7 +147,7 @@ export class Switch {
    * Check if switch is loading
    */
   isLoading(): boolean {
-    return this.options.loading || false;
+    return this.options.loading ?? false;
   }
 
   /**
@@ -177,6 +171,7 @@ export class Switch {
   private triggerChange(): void {
     const event = new Event('change', { bubbles: true });
     this.input.dispatchEvent(event);
+    this.options.onChange?.(this.checked, event);
   }
 
   /**

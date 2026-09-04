@@ -14,6 +14,7 @@ export interface TabItem {
 }
 
 export interface TabsOptions {
+  tabs?: TabItem[];
   activeKey?: string;
   type?: 'line' | 'card' | 'editable-card';
   onChange?: (key: string) => void;
@@ -24,11 +25,12 @@ export interface TabsOptions {
 export class Tabs {
   private element: HTMLDivElement;
   private options: TabsOptions;
-  private tabList: HTMLDivElement | null;
-  private contentList: HTMLDivElement | null;
+  private tabList: HTMLDivElement;
+  private contentList: HTMLDivElement;
   private tabs: Map<string, HTMLDivElement> = new Map();
   private contents: Map<string, HTMLDivElement> = new Map();
   private eventManager = new EventManager();
+  private activeKey = '';
 
   constructor(
     element: HTMLDivElement | string,
@@ -36,140 +38,62 @@ export class Tabs {
   ) {
     this.element = dom.getElement<HTMLDivElement>(element);
     this.options = {
-      activeKey: '',
       type: 'line',
       ...options,
     };
-    this.init();
-  }
 
-  private init(): void {
-    this.createTabs();
-    this.createContent();
-    this.bindEvents();
-  }
-
-  private createTabs(): void {
-    const tabList = dom.createElement('div', {
+    this.tabList = dom.createElement('div', {
       className: 'ag-tabs-tab-list',
     });
+    this.element.appendChild(this.tabList);
 
-    this.element.appendChild(tabList);
-    this.tabList = tabList;
-
-    this.options.tabs?.forEach(tab => {
-      this.addTab(tab);
-    });
-  }
-
-  private createContent(): void {
-    const contentList = dom.createElement('div', {
+    this.contentList = dom.createElement('div', {
       className: 'ag-tabs-content-list',
     });
+    this.element.appendChild(this.contentList);
 
-    this.element.appendChild(contentList);
-    this.contentList = contentList;
+    this.bindEvents();
 
-    this.options.tabs?.forEach(tab => {
-      const content = dom.createElement('div', {
-        className: 'ag-tabs-content-item',
-        attributes: {
-          'data-key': tab.key,
-        },
-      });
+    this.options.tabs?.forEach((tab) => this.addTab(tab));
 
-      if (tab.content) {
-        content.textContent = tab.content;
-      }
-
-      contentList.appendChild(content);
-      this.contents.set(tab.key, content);
-
-      // Hide inactive tabs
-      if (this.options.activeKey !== tab.key) {
-        content.style.display = 'none';
-      }
-    });
+    if (this.options.activeKey && this.tabs.has(this.options.activeKey)) {
+      this.setActiveKey(this.options.activeKey);
+    }
   }
 
   private bindEvents(): void {
-    if (this.tabList) {
-      this.eventManager.on(this.tabList, 'click', (e) => {
-        const target = e.target as HTMLElement;
-        const tab = target.closest('.ag-tabs-tab');
-        
-        if (tab) {
-          const key = tab.dataset.key || '';
-          if (key && !this.isTabDisabled(key)) {
-            this.setActiveKey(key);
-          }
-        }
-      });
-    }
-  }
+    this.eventManager.on(this.tabList, 'click', (e: Event) => {
+      const target = e.target as HTMLElement;
+      const tab = target.closest('.ag-tabs-tab');
 
-  private addTab(tab: TabItem): void {
-    const tabItem = dom.createElement('div', {
-      className: 'ag-tabs-tab',
-      attributes: {
-        'data-key': tab.key,
-      },
+      if (tab instanceof HTMLElement) {
+        const key = tab.dataset.key || '';
+        if (key && !this.isTabDisabled(key)) {
+          this.setActiveKey(key);
+        }
+      }
     });
-
-    if (tab.disabled) {
-      tabItem.classList.add('ag-tabs-tab--disabled');
-    }
-
-    if (tab.title) {
-      const title = dom.createElement('span', {
-        className: 'ag-tabs-tab-title',
-        textContent: tab.title,
-      });
-      tabItem.appendChild(title);
-    }
-
-    if (this.options.type === 'editable-card') {
-      const close = dom.createElement('span', {
-        className: 'ag-tabs-tab-close',
-        innerHTML: '<svg viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
-      });
-
-      close.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (this.options.onEdit) {
-          this.options.onEdit(tab.key, 'remove');
-        }
-      });
-
-      tabItem.appendChild(close);
-    }
-
-    if (this.tabList) {
-      this.tabList.appendChild(tabItem);
-    }
-    this.tabs.set(tab.key, tabItem);
   }
 
   private isTabDisabled(key: string): boolean {
     const tab = this.tabs.get(key);
-    return tab?.classList.contains('ag-tabs-tab--disabled') || false;
+    return tab?.classList.contains('ag-tabs-tab--disabled') ?? false;
   }
 
   /**
    * Set active tab
    */
   setActiveKey(key: string): void {
-    // Deselect all tabs
-    this.tabs.forEach(tab => {
+    if (this.isTabDisabled(key)) return;
+
+    this.tabs.forEach((tab) => {
       tab.classList.remove('ag-tabs-tab--active');
     });
 
-    // Hide all contents
-    this.contents.forEach(content => {
+    this.contents.forEach((content) => {
       content.style.display = 'none';
     });
 
-    // Select the requested tab
     const activeTab = this.tabs.get(key);
     const activeContent = this.contents.get(key);
 
@@ -181,25 +105,20 @@ export class Tabs {
       activeContent.style.display = 'block';
     }
 
+    this.activeKey = key;
     this.options.activeKey = key;
-
-    if (this.options.onChange) {
-      this.options.onChange(key);
-    }
+    this.options.onChange?.(key);
   }
 
   /**
-   * Add tab
+   * Add a tab (and its content pane). Activates it automatically if it's
+   * the first tab added or matches the configured `activeKey`.
    */
   addTab(tab: TabItem): void {
-    if (!this.tabList || !this.contentList) return;
-
     const tabItem = dom.createElement('div', {
       className: 'ag-tabs-tab',
-      attributes: {
-        'data-key': tab.key,
-      },
     });
+    tabItem.dataset.key = tab.key;
 
     if (tab.title) {
       const title = dom.createElement('span', {
@@ -216,14 +135,13 @@ export class Tabs {
     if (this.options.type === 'editable-card') {
       const close = dom.createElement('span', {
         className: 'ag-tabs-tab-close',
-        innerHTML: '<svg viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+        innerHTML:
+          '<svg viewBox="0 0 24 24" width="12" height="12"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
       });
 
-      close.addEventListener('click', (e) => {
+      this.eventManager.on(close, 'click', (e: Event) => {
         e.stopPropagation();
-        if (this.options.onEdit) {
-          this.options.onEdit(tab.key, 'remove');
-        }
+        this.options.onEdit?.(tab.key, 'remove');
       });
 
       tabItem.appendChild(close);
@@ -232,13 +150,11 @@ export class Tabs {
     this.tabList.appendChild(tabItem);
     this.tabs.set(tab.key, tabItem);
 
-    // Add content
     const content = dom.createElement('div', {
       className: 'ag-tabs-content-item',
-      attributes: {
-        'data-key': tab.key,
-      },
     });
+    content.dataset.key = tab.key;
+    content.style.display = 'none';
 
     if (tab.content) {
       content.textContent = tab.content;
@@ -247,7 +163,6 @@ export class Tabs {
     this.contentList.appendChild(content);
     this.contents.set(tab.key, content);
 
-    // If this is the first tab or set as active, activate it
     if (this.tabs.size === 1 || this.options.activeKey === tab.key) {
       this.setActiveKey(tab.key);
     }
@@ -269,13 +184,33 @@ export class Tabs {
       content.remove();
       this.contents.delete(key);
     }
+
+    if (this.activeKey === key) {
+      const nextKey = this.tabs.keys().next().value;
+      if (nextKey) {
+        this.setActiveKey(nextKey);
+      } else {
+        this.activeKey = '';
+        this.options.activeKey = undefined;
+      }
+    }
   }
 
   /**
-   * Get active key
+   * Set disabled state on a tab
+   */
+  setTabDisabled(key: string, disabled: boolean): void {
+    const tab = this.tabs.get(key);
+    if (tab) {
+      tab.classList.toggle('ag-tabs-tab--disabled', disabled);
+    }
+  }
+
+  /**
+   * Get active key. Returns an empty string when no tab is active yet.
    */
   getActiveKey(): string {
-    return this.options.activeKey;
+    return this.activeKey;
   }
 
   /**
@@ -290,13 +225,9 @@ export class Tabs {
    */
   destroy(): void {
     this.eventManager.removeAll();
-    this.tabs.forEach(tab => {
-      tab.remove();
-    });
+    this.tabs.forEach((tab) => tab.remove());
     this.tabs.clear();
-    this.contents.forEach(content => {
-      content.remove();
-    });
+    this.contents.forEach((content) => content.remove());
     this.contents.clear();
   }
 }

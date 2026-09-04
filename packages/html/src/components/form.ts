@@ -28,6 +28,7 @@ export class Form {
   private fields: Map<string, FormFieldConfig> = new Map();
   private errors: Map<string, string> = new Map();
   private eventManager = new EventManager();
+  private errorListeners: Map<string, Set<(error: string | null) => void>> = new Map();
 
   constructor(
     element: HTMLFormElement | string,
@@ -92,7 +93,7 @@ export class Form {
   }
 
   /**
-   * Set field error
+   * Set field error and notify any FormItem subscribed to this field.
    */
   setError(fieldName: string, error: string | null): void {
     if (error) {
@@ -100,28 +101,62 @@ export class Form {
     } else {
       this.errors.delete(fieldName);
     }
+    this.errorListeners.get(fieldName)?.forEach((listener) => listener(error));
   }
 
   /**
-   * Validate entire form
+   * Register a field with the form (used by FormItem to declare validation
+   * rules for a control it wraps).
+   */
+  registerField(config: FormFieldConfig): void {
+    this.fields.set(config.name, config);
+  }
+
+  /**
+   * Unregister a field (used by FormItem.destroy()).
+   */
+  unregisterField(name: string): void {
+    this.fields.delete(name);
+    this.errors.delete(name);
+    this.errorListeners.delete(name);
+  }
+
+  /**
+   * Subscribe to error changes for a specific field. Returns an
+   * unsubscribe function. Used by FormItem to reflect Form-level
+   * validation errors without polling.
+   */
+  onFieldError(fieldName: string, listener: (error: string | null) => void): () => void {
+    let set = this.errorListeners.get(fieldName);
+    if (!set) {
+      set = new Set();
+      this.errorListeners.set(fieldName, set);
+    }
+    set.add(listener);
+    return () => {
+      set!.delete(listener);
+    };
+  }
+
+  /**
+   * Validate entire form. Notifies any FormItem listeners for every
+   * registered field (clearing errors for fields that now pass).
    */
   validate(): boolean {
-    this.errors.clear();
     let isValid = true;
 
     this.fields.forEach((field, name) => {
       const input = Array.from(this.element.elements).find(
         el => (el as any).name === name
       ) as HTMLFormElement | undefined;
-      if (!input) return;
 
-      const value = dom.getValue(input);
-      const error = this.validateField(field, value);
+      const value = input ? dom.getValue(input) : undefined;
+      const error = input ? this.validateField(field, value) : null;
 
       if (error) {
-        this.errors.set(name, error);
         isValid = false;
       }
+      this.setError(name, error);
     });
 
     return isValid;
@@ -168,10 +203,14 @@ export class Form {
   }
 
   /**
-   * Clear all errors
+   * Clear all errors and notify any FormItem listeners.
    */
   clearErrors(): void {
+    const names = Array.from(this.errors.keys());
     this.errors.clear();
+    names.forEach((name) => {
+      this.errorListeners.get(name)?.forEach((listener) => listener(null));
+    });
   }
 
   /**
@@ -205,6 +244,7 @@ export class Form {
     this.eventManager.removeAll();
     this.fields.clear();
     this.errors.clear();
+    this.errorListeners.clear();
   }
 }
 

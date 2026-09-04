@@ -72,7 +72,7 @@ export class DatePicker {
   }
 }
 
-export interface DateRangePickerOptions {
+export interface RangePickerOptions {
   startValue?: string;
   endValue?: string;
   min?: string;
@@ -80,16 +80,24 @@ export interface DateRangePickerOptions {
   onChange?: (values: [string, string], event: Event) => void;
 }
 
-export class DateRangePicker {
+/**
+ * RangePicker - date range selection using two native date inputs.
+ *
+ * `DateRangePicker` (below) is kept as a compatibility alias with the same
+ * class and factory function; new code should prefer `RangePicker` /
+ * `createRangePicker` to match the naming used across
+ * React/Vue/Svelte.
+ */
+export class RangePicker {
   private startInput: HTMLInputElement;
   private endInput: HTMLInputElement;
-  private options: DateRangePickerOptions;
+  private options: RangePickerOptions;
   private eventManager = new EventManager();
 
   constructor(
     startElement: HTMLInputElement | string,
     endElement: HTMLInputElement | string,
-    options: DateRangePickerOptions = {}
+    options: RangePickerOptions = {}
   ) {
     this.startInput = dom.getElement<HTMLInputElement>(startElement);
     this.endInput = dom.getElement<HTMLInputElement>(endElement);
@@ -176,11 +184,11 @@ export function createDatePicker(options: DatePickerOptions = {}): DatePicker {
 }
 
 /**
- * Create date range picker
+ * Create a RangePicker (two native date inputs + shared change handler)
  */
-export function createDateRangePicker(
-  options: DateRangePickerOptions = {}
-): DateRangePicker {
+export function createRangePicker(
+  options: RangePickerOptions = {}
+): RangePicker {
   const startInput = dom.createElement('input', {
     className: 'ag-datepicker',
     attributes: { type: 'date', placeholder: 'Start date' }
@@ -191,6 +199,23 @@ export function createDateRangePicker(
     attributes: { type: 'date', placeholder: 'End date' }
   });
 
-  const instance = new DateRangePicker(startInput, endInput, options);
+  const instance = new RangePicker(startInput, endInput, options);
   return instance;
 }
+
+/**
+ * @deprecated Use `RangePicker` instead. Kept as a compatibility alias —
+ * same class, same behavior.
+ */
+export const DateRangePicker = RangePicker;
+
+/**
+ * @deprecated Use `createRangePicker` instead. Kept as a compatibility
+ * alias — same behavior.
+ */
+export const createDateRangePicker = createRangePicker;
+
+/**
+ * @deprecated Use `RangePickerOptions` instead.
+ */
+export type DateRangePickerOptions = RangePickerOptions;

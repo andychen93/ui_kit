@@ -34,8 +34,8 @@ function createSVGElement<K extends keyof SVGElementTagNameMap>(
   const element = document.createElementNS('http://www.w3.org/2000/svg', tag);
 
   if (options?.className) {
-    const classVal = typeof options.className === 'string' 
-      ? options.className 
+    const classVal = typeof options.className === 'string'
+      ? options.className
       : options.className.filter(Boolean).join(' ');
     if (classVal) {
       element.setAttribute('class', classVal);
@@ -108,7 +108,7 @@ export class Progress {
     const track = dom.createElement('div', {
       className: 'ag-progress-track',
     });
-    
+
     const success = dom.createElement('div', {
       className: 'ag-progress-success',
     });
@@ -127,7 +127,7 @@ export class Progress {
     if (this.options.format) {
       this.createText();
     }
-    
+
     this.updateProgress();
   }
 
@@ -160,7 +160,7 @@ export class Progress {
       },
     });
     svg.appendChild(circleTrack);
-    
+
     const circleSuccess = createSVGElement('circle', {
       className: 'ag-progress-circle-success',
       attributes: {
@@ -178,7 +178,7 @@ export class Progress {
     if (this.options.format) {
       this.createText();
     }
-    
+
     this.updateProgress();
   }
 
@@ -197,18 +197,18 @@ export class Progress {
       if (this.indicatorElement) {
         this.indicatorElement.style.width = percentString;
       }
-      
+
       if (this.successElement) {
         this.successElement.style.width = percentString;
       }
-      
+
       this.element.style.setProperty('--ag-progress-percent', percentString);
-      
+
       // Add active class if status is active
       if (this.options.status === 'active') {
         this.element.classList.add('ag-progress--active');
       }
-      
+
       // Update text if format provided
       if (this.options.format) {
         const text = this.element.querySelector('.ag-progress-text');
@@ -220,21 +220,21 @@ export class Progress {
       if (this.element) {
         const track = this.element.querySelector('.ag-progress-circle-track');
         const success = this.element.querySelector('.ag-progress-circle-success');
-        
-        if (track) {
+
+        if (track instanceof SVGElement) {
           const offset = 251.2 - (251.2 * percent) / 100;
           track.style.strokeDashoffset = String(offset);
         }
-        
-        if (success) {
+
+        if (success instanceof SVGElement) {
           success.style.strokeDashoffset = '0';
         }
-        
+
         // Add active class if status is active
         if (this.options.status === 'active') {
           this.element.classList.add('ag-progress--active');
         }
-        
+
         // Update text if format provided
         if (this.options.format) {
           const text = this.element.querySelector('.ag-progress-text');
@@ -304,7 +304,7 @@ export class Progress {
    */
   destroy(): void {
     this.eventManager.removeAll();
-    
+
     if (this.trackElement) {
       this.trackElement.remove();
       this.trackElement = null;

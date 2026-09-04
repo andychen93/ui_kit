@@ -29,7 +29,7 @@ npm install @argon-kit/html @argon-kit/styles
 
   <script type="module">
     import { Button } from '@argon-kit/html';
-    
+
     const btn = new Button('#my-button', {
       variant: 'primary',
       size: 'md',

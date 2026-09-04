@@ -512,10 +512,11 @@ export function stepItemClasses(options: {
   index: number;
   className?: string;
 }): string {
-  const isCurrent = options.index === options.current;
-  const isFinished = options.index < options.current;
+  const current = options.current ?? 0;
+  const isCurrent = options.index === current;
+  const isFinished = options.index < current;
   const status = isFinished ? 'finish' : isCurrent ? 'process' : 'wait';
-  
+
   return classNames(
     ['ag-step-item', options.className].filter(Boolean),
     {
@@ -678,6 +679,27 @@ export function treeSelectClasses(options: {
       [`ag-tree-select--${options.size || 'md'}`]: true,
       'ag-tree-select--disabled': options.disabled,
       'ag-tree-select--error': !!options.error,
+    }
+  );
+}
+
+/**
+ * Build tag classes. Tag's variant set includes "default" (no color
+ * suffix), matching the Vue/Svelte/React Tag components.
+ */
+export function tagClasses(options: {
+  variant?: 'default' | 'primary' | 'info' | 'success' | 'warning' | 'danger';
+  size?: ComponentSize;
+  closeable?: boolean;
+  className?: string;
+}): string {
+  const variant = options.variant || 'default';
+  return classNames(
+    ['ag-tag', options.className].filter(Boolean),
+    {
+      [`ag-tag--${variant}`]: variant !== 'default',
+      [`ag-tag--${options.size || 'md'}`]: true,
+      'ag-tag--closeable': options.closeable,
     }
   );
 }

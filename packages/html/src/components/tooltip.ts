@@ -2,7 +2,7 @@
  * Tooltip component
  */
 
-import { ComponentVariant, EventHandler } from '../types/index';
+import { ComponentVariant } from '../types/index';
 import * as dom from '../utils/dom';
 import { tooltipClasses } from '../utils/css-classes';
 import { EventManager } from '../utils/event';
@@ -17,12 +17,14 @@ export interface TooltipOptions {
   onVisibleChange?: (visible: boolean) => void;
 }
 
+let tooltipIdCounter = 0;
+
 export class Tooltip {
   private target: HTMLElement;
   private element: HTMLDivElement;
   private title: string;
   private options: TooltipOptions;
-  private visible: boolean = false;
+  private visible = false;
   private eventManager = new EventManager();
 
   constructor(
@@ -37,50 +39,43 @@ export class Tooltip {
       trigger: 'hover',
       ...options,
     };
-    this.init();
-  }
 
-  private init(): void {
-    this.createTooltipElement();
+    this.element = this.createTooltipElement();
     this.updateClasses();
     this.bindEvents();
   }
 
-  private createTooltipElement(): void {
+  private createTooltipElement(): HTMLDivElement {
     const tooltip = dom.createElement('div', {
       className: 'ag-tooltip-inner',
       textContent: this.title,
     });
-    
-    this.element = dom.createElement('div', {
+
+    const element = dom.createElement('div', {
       className: 'ag-tooltip',
       attributes: {
         role: 'tooltip',
-        id: `tooltip-${this.generateId()}`,
+        id: `ag-tooltip-${++tooltipIdCounter}`,
       },
     });
-    this.element.appendChild(tooltip);
-    
-    // Position arrow
+    element.appendChild(tooltip);
+    element.style.display = 'none';
+
     const arrow = dom.createElement('div', {
       className: 'ag-tooltip-arrow',
     });
-    this.element.appendChild(arrow);
-    
-    document.body.appendChild(this.element);
-  }
+    element.appendChild(arrow);
 
-  private generateId(): string {
-    return Math.random().toString(36).substr(2, 9);
+    document.body.appendChild(element);
+    return element;
   }
 
   private updateClasses(): void {
-    const classes = tooltipClasses({
+    this.element.className = tooltipClasses({
       variant: this.options.variant,
       position: this.options.position,
       className: this.options.className,
     });
-    this.element.className = classes;
   }
 
   private bindEvents(): void {
@@ -96,9 +91,13 @@ export class Tooltip {
       this.eventManager.on(this.target, 'blur', () => this.hide());
     }
 
-    // Hide on document click
+    // Hide on document click (for click trigger)
     this.eventManager.on(document, 'click', (e: MouseEvent) => {
-      if (this.visible && e.target !== this.target && !this.element.contains(e.target as Node)) {
+      if (
+        this.visible &&
+        e.target !== this.target &&
+        !this.element.contains(e.target as Node)
+      ) {
         this.hide();
       }
     });
@@ -109,14 +108,12 @@ export class Tooltip {
    */
   show(): void {
     if (this.visible || this.options.disabled) return;
-    
+
     this.visible = true;
     this.element.style.display = 'block';
     this.position();
-    
-    if (this.options.onVisibleChange) {
-      this.options.onVisibleChange(true);
-    }
+
+    this.options.onVisibleChange?.(true);
   }
 
   /**
@@ -124,13 +121,11 @@ export class Tooltip {
    */
   hide(): void {
     if (!this.visible) return;
-    
+
     this.visible = false;
     this.element.style.display = 'none';
-    
-    if (this.options.onVisibleChange) {
-      this.options.onVisibleChange(false);
-    }
+
+    this.options.onVisibleChange?.(false);
   }
 
   /**
@@ -151,10 +146,9 @@ export class Tooltip {
     const targetRect = this.target.getBoundingClientRect();
     const tooltipRect = this.element.getBoundingClientRect();
     const arrow = this.element.querySelector('.ag-tooltip-arrow');
-    
+
     let top = 0;
     let left = 0;
-    let positionClass = '';
 
     const gap = 8;
 
@@ -162,25 +156,21 @@ export class Tooltip {
       case 'top':
         top = targetRect.top - tooltipRect.height - gap;
         left = targetRect.left + (targetRect.width - tooltipRect.width) / 2;
-        positionClass = 'ag-tooltip--top';
         if (arrow) arrow.className = 'ag-tooltip-arrow ag-tooltip-arrow--bottom';
         break;
       case 'bottom':
         top = targetRect.bottom + gap;
         left = targetRect.left + (targetRect.width - tooltipRect.width) / 2;
-        positionClass = 'ag-tooltip--bottom';
         if (arrow) arrow.className = 'ag-tooltip-arrow ag-tooltip-arrow--top';
         break;
       case 'left':
         top = targetRect.top + (targetRect.height - tooltipRect.height) / 2;
         left = targetRect.left - tooltipRect.width - gap;
-        positionClass = 'ag-tooltip--left';
         if (arrow) arrow.className = 'ag-tooltip-arrow ag-tooltip-arrow--right';
         break;
       case 'right':
         top = targetRect.top + (targetRect.height - tooltipRect.height) / 2;
         left = targetRect.right + gap;
-        positionClass = 'ag-tooltip--right';
         if (arrow) arrow.className = 'ag-tooltip-arrow ag-tooltip-arrow--left';
         break;
     }
@@ -200,12 +190,7 @@ export class Tooltip {
 
     this.element.style.top = `${top}px`;
     this.element.style.left = `${left}px`;
-    
-    this.element.className = tooltipClasses({
-      variant: this.options.variant,
-      position: this.options.position,
-      className: this.options.className,
-    });
+    this.element.style.position = 'fixed';
   }
 
   /**
@@ -217,7 +202,7 @@ export class Tooltip {
     if (inner) {
       inner.textContent = title;
     }
-    
+
     if (this.visible) {
       this.position();
     }
@@ -237,7 +222,7 @@ export class Tooltip {
    * Check if disabled
    */
   isDisabled(): boolean {
-    return this.options.disabled || false;
+    return this.options.disabled ?? false;
   }
 
   /**
@@ -262,20 +247,23 @@ export class Tooltip {
   }
 
   /**
-   * Destroy component
+   * Destroy component: removes listeners and the tooltip's portal element
+   * from `document.body`.
    */
   destroy(): void {
     this.eventManager.removeAll();
-    if (this.element && this.element.parentNode) {
+    if (this.element.parentNode) {
       this.element.parentNode.removeChild(this.element);
     }
   }
 }
 
 /**
- * Create tooltip from scratch
+ * Attach a tooltip to a target element (or selector).
  */
-export function createTooltip(options: TooltipOptions): Tooltip {
-  // For tooltip, target is required
-  throw new Error('Tooltip requires a target element');
+export function createTooltip(
+  target: HTMLElement | string,
+  options: TooltipOptions = {}
+): Tooltip {
+  return new Tooltip(target, options);
 }

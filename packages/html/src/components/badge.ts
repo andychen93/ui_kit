@@ -96,8 +96,8 @@ export class Badge {
   setDot(dot: boolean): void {
     this.options.dot = dot;
     if (this.countElement) {
-      this.countElement.className = dot 
-        ? 'ag-badge-content ag-badge-dot' 
+      this.countElement.className = dot
+        ? 'ag-badge-content ag-badge-dot'
         : 'ag-badge-content';
     }
   }

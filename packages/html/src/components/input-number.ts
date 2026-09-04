@@ -156,7 +156,7 @@ export class InputNumber {
    */
   increment(): void {
     if (this.options.disabled || !this.input) return;
-    
+
     const currentValue = this.parseValue(this.input.value);
     const newValue = this.limitValue(currentValue + this.options.step!);
     this.setValue(newValue);
@@ -167,7 +167,7 @@ export class InputNumber {
    */
   decrement(): void {
     if (this.options.disabled || !this.input) return;
-    
+
     const currentValue = this.parseValue(this.input.value);
     const newValue = this.limitValue(currentValue - this.options.step!);
     this.setValue(newValue);
@@ -212,7 +212,7 @@ export class InputNumber {
     if (!this.input) return;
     const currentValue = this.parseValue(this.input.value);
     const limitedValue = this.limitValue(currentValue);
-    
+
     if (this.formatValue(limitedValue) !== this.parseValue(this.input.value)) {
       this.input.value = String(this.formatValue(limitedValue));
       this.triggerChange();
@@ -290,6 +290,7 @@ export class InputNumber {
    */
   setReadonly(readonly: boolean): void {
     this.options.readonly = readonly;
+    if (!this.input) return;
     dom.setAttributes(this.input, {
       readonly: readonly ? 'readonly' : null,
     });
