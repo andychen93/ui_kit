@@ -52,6 +52,15 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
     dataset?: Record<string, string>;
     innerHTML?: string;
     textContent?: string;
+    type?: string;
+    href?: string;
+    src?: string;
+    alt?: string;
+    name?: string;
+    value?: string;
+    placeholder?: string;
+    disabled?: boolean;
+    checked?: boolean;
   }
 ): HTMLElementTagNameMap[K] {
   const element = document.createElement(tag);
@@ -84,6 +93,42 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
 
   if (options?.textContent) {
     element.textContent = options.textContent;
+  }
+
+  if (options?.type) {
+    element.setAttribute('type', options.type);
+  }
+
+  if (options?.href) {
+    element.setAttribute('href', options.href);
+  }
+
+  if (options?.src) {
+    element.setAttribute('src', options.src);
+  }
+
+  if (options?.alt) {
+    element.setAttribute('alt', options.alt);
+  }
+
+  if (options?.name) {
+    element.setAttribute('name', options.name);
+  }
+
+  if (options?.value !== undefined) {
+    element.setAttribute('value', options.value);
+  }
+
+  if (options?.placeholder) {
+    element.setAttribute('placeholder', options.placeholder);
+  }
+
+  if (options?.disabled) {
+    element.setAttribute('disabled', 'disabled');
+  }
+
+  if (options?.checked) {
+    element.setAttribute('checked', 'checked');
   }
 
   return element;
