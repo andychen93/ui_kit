@@ -42,7 +42,16 @@ export function getElements<T extends HTMLElement = HTMLElement>(
 }
 
 /**
- * Create element with attributes and content
+ * Create element with attributes and content.
+ *
+ * Security note: `options.innerHTML`, when provided, is written directly
+ * via the DOM `innerHTML` setter and is **not sanitized**. This helper is
+ * used internally by nearly every component in this package (icons, close
+ * buttons, etc.) with fixed, developer-authored markup — that usage is
+ * safe. If you call `createElement` yourself with `innerHTML` built from
+ * user input or an external source, you are responsible for sanitizing it
+ * first (e.g. with DOMPurify). Prefer `textContent` for any text that
+ * isn't meant to contain markup.
  */
 export function createElement<K extends keyof HTMLElementTagNameMap>(
   tag: K,
@@ -50,6 +59,10 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
     className?: string | string[];
     attributes?: Record<string, string | undefined>;
     dataset?: Record<string, string>;
+    /**
+     * Written via `innerHTML` — NOT sanitized. See the function-level
+     * security note above.
+     */
     innerHTML?: string;
     textContent?: string;
     type?: string;

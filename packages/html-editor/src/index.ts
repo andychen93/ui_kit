@@ -48,7 +48,13 @@ export class RichText {
   }
 
   /**
-   * Set HTML content
+   * Set HTML content.
+   *
+   * Security note: `html` is written directly via `innerHTML` and is
+   * **not sanitized**. Only pass trusted, developer-authored markup, or
+   * content you have already sanitized yourself (e.g. with DOMPurify).
+   * Never pass raw user-provided or externally-sourced HTML directly to
+   * this method.
    */
   setHTML(html: string): void {
     this.quill.root.innerHTML = html;

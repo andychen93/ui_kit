@@ -1,5 +1,12 @@
 /**
  * Table and Pagination components
+ *
+ * Security note: `Column.render` may return either an `HTMLElement`
+ * (appended as-is, safe) or a `string` (written via `innerHTML`, NOT
+ * sanitized). Prefer returning an `HTMLElement` built with `textContent`
+ * when rendering anything derived from user input or an external source.
+ * If you do return a string, sanitize it yourself first (e.g. with
+ * DOMPurify) — this component performs no sanitization.
  */
 
 import * as dom from '../utils/dom';
@@ -18,6 +25,12 @@ export interface Column {
   ellipsis?: boolean;
   /** Enables a clickable sort header for this column. */
   sorter?: (a: any, b: any) => number;
+  /**
+   * Custom cell renderer. Return an `HTMLElement` (safe, appended as-is)
+   * or a `string` (written via `innerHTML` — NOT sanitized; only return
+   * a string for trusted, developer-controlled markup, or sanitize
+   * user/external content yourself first).
+   */
   render?: (value: any, record: any, index: number) => string | HTMLElement;
 }
 

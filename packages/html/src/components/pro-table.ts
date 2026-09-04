@@ -29,6 +29,12 @@ export interface TableColumn {
   width?: string;
   align?: 'left' | 'center' | 'right';
   sortable?: boolean;
+  /**
+   * Custom cell renderer. Return an `HTMLElement` (safe, appended as-is)
+   * or a `string` (written via `innerHTML` — NOT sanitized; only return
+   * a string for trusted, developer-controlled markup, or sanitize
+   * user/external content yourself first, e.g. with DOMPurify).
+   */
   render?: (value: any, record: any, index: number) => string | HTMLElement;
 }
 
@@ -310,6 +316,8 @@ export class ProTable {
         if (col.render) {
           const rendered = col.render(value, record, index);
           if (typeof rendered === 'string') {
+            // Caller-controlled HTML string — NOT sanitized. See the
+            // TableColumn.render JSDoc above; only pass trusted markup.
             td.innerHTML = rendered;
           } else {
             td.appendChild(rendered);

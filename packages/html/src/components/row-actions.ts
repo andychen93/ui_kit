@@ -8,6 +8,11 @@ import { EventManager } from '../utils/event';
 export interface RowAction {
   key: string;
   text?: string;
+  /**
+   * Icon markup, written via `innerHTML` — NOT sanitized. Only pass
+   * trusted, developer-authored markup (e.g. an inline SVG string you
+   * wrote yourself). Never derive this from user input or external data.
+   */
   icon?: string;
   danger?: boolean;
   disabled?: boolean;

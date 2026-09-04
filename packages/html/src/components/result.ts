@@ -8,6 +8,11 @@ export interface ResultOptions {
   title?: string;
   description?: string;
   icon?: 'success' | 'error' | 'warning' | 'info' | 'custom';
+  /**
+   * Custom icon markup, used when `icon: 'custom'`. Written via
+   * `innerHTML` — NOT sanitized. Only pass trusted, developer-authored
+   * markup; sanitize any user/external content first if it must be used.
+   */
   customIcon?: string;
   extra?: string;
   className?: string;
@@ -113,7 +118,8 @@ export class Result {
   }
 
   /**
-   * Set custom icon
+   * Set custom icon. `html` is written via `innerHTML` and is NOT
+   * sanitized — only pass trusted markup (see `customIcon` option above).
    */
   setCustomIcon(html: string): void {
     this.options.icon = 'custom';

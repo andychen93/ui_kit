@@ -1,5 +1,12 @@
 /**
  * Modal and Drawer overlay components
+ *
+ * Security note: `content` and `footer` accept either an `HTMLElement`
+ * (appended as-is) or a `string` (written via `innerHTML`). String HTML is
+ * NOT sanitized. Only pass trusted, developer-authored markup as a string.
+ * If the content includes anything derived from user input or an external
+ * source, sanitize it first (e.g. with DOMPurify) or build an `HTMLElement`
+ * using `textContent` instead.
  */
 
 import * as dom from '../utils/dom';
@@ -7,7 +14,19 @@ import { EventManager, preventDefault } from '../utils/event';
 
 export interface ModalOptions {
   title?: string;
+  /**
+   * Body content. An `HTMLElement` is appended as-is (safe). A `string`
+   * is written via `innerHTML` and is **not sanitized** — only pass
+   * trusted, developer-authored markup. If the content includes any
+   * user-provided or externally-sourced text, sanitize it yourself
+   * (e.g. with DOMPurify) before passing it here, or pass an
+   * `HTMLElement` built with `textContent` instead.
+   */
   content?: string | HTMLElement;
+  /**
+   * Footer content. Same `innerHTML` caveat as `content` applies when
+   * passing a `string`.
+   */
   footer?: string | HTMLElement;
   centered?: boolean;
   closeable?: boolean;
@@ -175,6 +194,14 @@ export class Modal {
 
 export interface DrawerOptions {
   title?: string;
+  /**
+   * Body content. An `HTMLElement` is appended as-is (safe). A `string`
+   * is written via `innerHTML` and is **not sanitized** — only pass
+   * trusted, developer-authored markup. Sanitize any user-provided or
+   * externally-sourced text yourself before passing it here (e.g. with
+   * DOMPurify), or pass an `HTMLElement` built with `textContent`
+   * instead.
+   */
   content?: string | HTMLElement;
   placement?: 'left' | 'right' | 'top' | 'bottom';
   closeable?: boolean;
