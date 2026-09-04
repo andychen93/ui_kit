@@ -1,18 +1,21 @@
 {
-  "name": "@argon-kit/playground-html",
-  "version": "0.1.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@argon-kit/html": "workspace:*",
-    "@argon-kit/styles": "workspace:*"
-  },
-  "devDependencies": {
-    "vite": "^6.4.3",
-    "typescript": "^5.6.3"
-  }
+    "name": "@argon-kit/playground-html",
+    "version": "0.1.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview"
+    },
+    "dependencies": {
+        "@argon-kit/html": "workspace:*",
+        "@argon-kit/html-charts": "workspace:*",
+        "@argon-kit/html-editor": "workspace:*",
+        "@argon-kit/html-calendar": "workspace:*",
+        "@argon-kit/styles": "workspace:*"
+    },
+    "devDependencies": {
+        "vite": "^6.4.3",
+        "typescript": "^5.6.3"
+    }
 }
