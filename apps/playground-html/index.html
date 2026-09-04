@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
+    <title>@argon-kit/html Playground</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .demo {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+
+        h1 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #555;
+            font-size: 18px;
+        }
+
+        h3 {
+            margin-top: 24px;
+            color: #444;
+            font-size: 15px;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            margin: 5px;
+            padding: 8px;
+        }
+
+        .divider {
+            margin: 30px 0;
+            border-top: 2px solid #ddd;
+        }
+
+        .ag-coverage-panel {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin: 0 0 20px 0;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .ag-coverage-panel--ok {
+            background: #e6f7e6;
+            border: 1px solid #52c41a;
+            color: #237804;
+        }
+
+        .ag-coverage-panel--warning {
+            background: #fff2e8;
+            border: 1px solid #fa8c16;
+            color: #ad4e00;
+        }
+
+        .ag-coverage-panel__missing {
+            margin-top: 6px;
+            font-weight: 400;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>@argon-kit/html Component Playground</h1>
+    <p>
+        Interactive demonstrations of every component @argon-kit/html shares with
+        @argon-kit/react, @argon-kit/vue, and @argon-kit/svelte, plus the HTML-only
+        plugin packages (charts, editor, calendar).
+    </p>
+
+    <!-- Component coverage panel: rendered by src/coverage.ts using the same -->
+    <!-- manifest tests/contract/src/html-exports-parity.test.ts checks against. -->
+    <div id="coverage-panel"></div>
+
+    <!-- General (form basics) -->
+    <div class="demo" id="section-general">
+        <h2>General</h2>
+    </div>
+
+    <!-- Forms -->
+    <div class="demo" id="section-forms">
+        <h2>Forms</h2>
+    </div>
+
+    <!-- Data display -->
+    <div class="demo" id="section-data-display">
+        <h2>Data Display</h2>
+    </div>
+
+    <!-- Navigation / Layout -->
+    <div class="demo" id="section-navigation">
+        <h2>Navigation &amp; Layout</h2>
+    </div>
+
+    <!-- Feedback / Overlay -->
+    <div class="demo" id="section-feedback">
+        <h2>Feedback &amp; Overlay</h2>
+    </div>
+
+    <!-- Pro / advanced data -->
+    <div class="demo" id="section-pro">
+        <h2>Pro Components</h2>
+    </div>
+
+    <!-- Charts Component (HTML plugin package) -->
+    <div class="demo">
+        <h2>Charts Component (@argon-kit/html-charts)</h2>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <canvas id="lineChart" width="400" height="200"></canvas>
+            <canvas id="barChart" width="400" height="200"></canvas>
+            <canvas id="pieChart" width="400" height="200"></canvas>
+            <canvas id="doughnutChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <!-- Editor Component (HTML plugin package) -->
+    <div class="demo">
+        <h2>Editor Component (@argon-kit/html-editor)</h2>
+        <div id="editor1" style="height: 200px;"></div>
+    </div>
+
+    <!-- Calendar Component (HTML plugin package) -->
+    <div class="demo">
+        <h2>Calendar Component (@argon-kit/html-calendar)</h2>
+        <div id="calendar1" style="height: 400px;"></div>
+    </div>
+
+    <script type="module" src="./src/main.ts"></script>
+</body>
+
+</html>
