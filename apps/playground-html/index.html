@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@argon-kit/html Playground</title>
-    <link rel="stylesheet" href="node_modules/@argon-kit/styles/dist/index.css">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -68,460 +67,321 @@
     <h1>@argon-kit/html Component Playground</h1>
     <p>Interactive demonstrations of all @argon-kit/html components</p>
 
-    <!-- Basic Components -->
-    <div class="demo">
-        <h2>Button Component</h2>
-        <button id="btn1">Primary Button</button>
-        <button id="btn2">Secondary Button</button>
-        <button id="btn3">Danger Button</button>
-    </div>
+    <script type="module" src="./src/main.ts"></script>
+</body>
 
-    <div class="demo">
-        <h2>Input Component</h2>
-        <input type="text" id="input1" placeholder="Enter text">
-        <input type="email" id="input2" placeholder="Enter email">
-        <input type="password" id="input3" placeholder="Enter password">
-    </div>
+</html>
+import {
+Button,
+Input,
+Checkbox,
+Radio,
+RadioGroup,
+Select,
+Form,
+Message,
+Notification,
+showMessage,
+showNotification,
+showModal,
+showDrawer,
+Table,
+createTable,
+Pagination,
+createPagination,
+Dropdown,
+Tree,
+createTree,
+Upload
+} from '@argon-kit/html';
 
-    <div class="demo">
-        <h2>Checkbox Component</h2>
-        <div>
-            <input type="checkbox" id="check1">
-            <label for="check1">Agree to terms</label>
-        </div>
-        <div>
-            <input type="checkbox" id="check2">
-            <label for="check2">Subscribe to newsletter</label>
-        </div>
-    </div>
+// Try to import chart functions if available
+let chartsAvailable = false;
+async function initCharts() {
+try {
+const charts = await import('@argon-kit/html-charts');
+chartsAvailable = true;
+window.chartFunctions = charts;
+initChartsUI();
+} catch (e) {
+console.log('Charts not available:', e.message);
+}
+}
 
-    <div class="demo">
-        <h2>Radio Component</h2>
-        <div id="radiogroup-color">
-            <input type="radio" name="color" value="red" id="radio1">
-            <label for="radio1">Red</label>
-            <input type="radio" name="color" value="green" id="radio2">
-            <label for="radio2">Green</label>
-            <input type="radio" name="color" value="blue" id="radio3">
-            <label for="radio3">Blue</label>
-        </div>
-    </div>
+function initChartsUI() {
+if (!chartsAvailable || !window.chartFunctions) return;
 
-    <div class="demo">
-        <h2>Select Component</h2>
-        <select id="select1">
-            <option>Choose an option</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
-        </select>
-    </div>
+try {
+const { createLineChart, createBarChart, createPieChart, createDoughnutChart } = window.chartFunctions;
 
-    <!-- Form Component -->
-    <div class="demo">
-        <h2>Form Component</h2>
-        <form id="form1">
-            <div>
-                <input type="text" name="username" placeholder="Username" required style="display: block; margin: 5px 0;">
-                <input type="email" name="email" placeholder="Email" required style="display: block; margin: 5px 0;">
-                <input type="password" name="password" placeholder="Password" required style="display: block; margin: 5px 0;">
-            </div>
-            <button type="submit">Submit Form</button>
-        </form>
-    </div>
+// Line Chart
+createLineChart('#lineChart', {
+labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+datasets: [{
+label: 'Sales',
+data: [10, 20, 15, 25, 30],
+borderColor: '#FF6384',
+backgroundColor: 'rgba(255, 99, 132, 0.1)'
+}]
+});
 
-    <!-- Table Component -->
-    <div class="demo">
-        <h2>Table Component</h2>
-        <table id="table1"></table>
-    </div>
+// Bar Chart
+createBarChart('#barChart', {
+labels: ['A', 'B', 'C', 'D'],
+datasets: [{
+label: 'Values',
+data: [12, 19, 3, 5],
+backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+}]
+});
 
-    <!-- Pagination Component -->
-    <div class="demo">
-        <h2>Pagination Component</h2>
-        <div id="pagination1"></div>
-    </div>
+// Pie Chart
+createPieChart('#pieChart', {
+labels: ['Red', 'Blue', 'Yellow'],
+datasets: [{
+label: 'Distribution',
+data: [30, 20, 50],
+backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+}]
+});
 
-    <!-- Dropdown Component -->
-    <div class="demo">
-        <h2>Dropdown Component</h2>
-        <button id="dropdown-trigger">Open Menu</button>
-        <div id="dropdown1"></div>
-    </div>
+// Doughnut Chart
+createDoughnutChart('#doughnutChart', {
+labels: ['Small', 'Medium', 'Large'],
+datasets: [{
+label: 'Sizes',
+data: [25, 35, 40],
+backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+}]
+});
+} catch (e) {
+console.log('Chart initialization error:', e.message);
+}
+}
 
-    <!-- Tree Component -->
-    <div class="demo">
-        <h2>Tree Component</h2>
-        <ul id="tree1"></ul>
-    </div>
+// Button examples
+new Button('#btn1', {
+variant: 'primary',
+onClick: () => showMessage('Primary button clicked!')
+});
 
-    <!-- Message Component -->
-    <div class="demo">
-        <h2>Message Component</h2>
-        <button onclick="window.showMessageSuccess()">Show Success</button>
-        <button onclick="window.showMessageError()">Show Error</button>
-        <button onclick="window.showMessageWarning()">Show Warning</button>
-        <button onclick="window.showMessageInfo()">Show Info</button>
-    </div>
+new Button('#btn2', {
+variant: 'secondary',
+onClick: () => showMessage('Secondary button clicked!')
+});
 
-    <!-- Notification Component -->
-    <div class="demo">
-        <h2>Notification Component</h2>
-        <button onclick="window.showNotificationSuccess()">Success Notification</button>
-        <button onclick="window.showNotificationError()">Error Notification</button>
-    </div>
+new Button('#btn3', {
+variant: 'danger',
+onClick: () => showMessage('Danger button clicked!')
+});
 
-    <!-- Modal Component -->
-    <div class="demo">
-        <h2>Modal Component</h2>
-        <button onclick="window.showModalDemo()">Open Modal</button>
-        <button onclick="window.showDrawerDemo()">Open Drawer</button>
-    </div>
+// Input examples
+new Input('#input1', {
+onChange: (value) => console.log('Input 1:', value)
+});
 
-    <!-- Charts Component -->
-    <div class="demo">
-        <h2>Charts Component</h2>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <canvas id="lineChart" width="400" height="200"></canvas>
-            <canvas id="barChart" width="400" height="200"></canvas>
-            <canvas id="pieChart" width="400" height="200"></canvas>
-            <canvas id="doughnutChart" width="400" height="200"></canvas>
-        </div>
-    </div>
+new Input('#input2', {
+type: 'email',
+onChange: (value) => console.log('Input 2:', value)
+});
 
-    <!-- Upload Component -->
-    <div class="demo">
-        <h2>Upload Component</h2>
-        <input type="file" id="upload1" multiple>
-        <div id="upload-info"></div>
-    </div>
+new Input('#input3', {
+type: 'password',
+onChange: (value) => console.log('Input 3: password changed')
+});
 
-    <!-- DatePicker Component -->
-    <div class="demo">
-        <h2>DatePicker Component</h2>
-        <input type="date" id="datepicker1">
-    </div>
+// Checkbox examples
+new Checkbox('#check1', {
+onChange: (checked) => console.log('Checkbox 1:', checked)
+});
 
-    <!-- DateRangePicker Component -->
-    <div class="demo">
-        <h2>DateRangePicker Component</h2>
-        <div>
-            <input type="date" id="startDate" placeholder="Start Date">
-            <input type="date" id="endDate" placeholder="End Date">
-        </div>
-    </div>
+new Checkbox('#check2', {
+onChange: (checked) => console.log('Checkbox 2:', checked)
+});
 
-    <script type="module">
-        import {
-            Button,
-            Input,
-            Checkbox,
-            Radio,
-            RadioGroup,
-            Select,
-            Form,
-            Message,
-            Notification,
-            showMessage,
-            showNotification,
-            showModal,
-            showDrawer,
-            Table,
-            createTable,
-            Pagination,
-            createPagination,
-            Dropdown,
-            Tree,
-            createTree,
-            Upload
-        } from '@argon-kit/html';
+// Radio group example
+new RadioGroup('#radiogroup-color', {
+name: 'color',
+onChange: (value) => console.log('Selected color:', value)
+});
 
-        // Try to import chart functions if available
-        let chartsAvailable = false;
-        async function initCharts() {
-            try {
-                const charts = await import('@argon-kit/html-charts');
-                chartsAvailable = true;
-                window.chartFunctions = charts;
-                initChartsUI();
-            } catch (e) {
-                console.log('Charts not available:', e.message);
-            }
-        }
+// Select example
+new Select('#select1', {
+onChange: (value) => console.log('Selected:', value)
+});
 
-        function initChartsUI() {
-            if (!chartsAvailable || !window.chartFunctions) return;
+// Form example
+new Form('#form1', {
+fields: [
+{ name: 'username', required: true, minLength: 3 },
+{ name: 'email', required: true, pattern: '^[^@]+@[^@]+$' },
+{ name: 'password', required: true, minLength: 6 }
+],
+onSubmit: (data) => {
+console.log('Form submitted:', data);
+showMessage('Form submitted successfully!');
+}
+});
 
-            try {
-                const { createLineChart, createBarChart, createPieChart, createDoughnutChart } = window.chartFunctions;
+// Table example
+const table = createTable({
+columns: [
+{ key: 'name', title: 'Name' },
+{ key: 'email', title: 'Email' },
+{ key: 'status', title: 'Status' }
+],
+data: [
+{ name: 'John Doe', email: 'john@example.com', status: 'Active' },
+{ name: 'Jane Smith', email: 'jane@example.com', status: 'Pending' },
+{ name: 'Bob Wilson', email: 'bob@example.com', status: 'Active' }
+]
+});
+document.getElementById('table1').replaceWith(table.getElement());
 
-                // Line Chart
-                createLineChart('#lineChart', {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-                    datasets: [{
-                        label: 'Sales',
-                        data: [10, 20, 15, 25, 30],
-                        borderColor: '#FF6384',
-                        backgroundColor: 'rgba(255, 99, 132, 0.1)'
-                    }]
-                });
+// Pagination example
+const paginationContainer = document.createElement('div');
+document.getElementById('pagination1').appendChild(paginationContainer);
+const pagination = new Pagination(paginationContainer, {
+total: 100,
+pageSize: 10,
+onChange: (page) => console.log('Page changed to:', page)
+});
 
-                // Bar Chart
-                createBarChart('#barChart', {
-                    labels: ['A', 'B', 'C', 'D'],
-                    datasets: [{
-                        label: 'Values',
-                        data: [12, 19, 3, 5],
-                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
-                    }]
-                });
+// Dropdown example
+const dropdown = new Dropdown('#dropdown-trigger', {
+items: [
+{ label: 'Menu Item 1', value: 'item1' },
+{ label: 'Menu Item 2', value: 'item2' },
+{
+label: 'Submenu',
+value: 'submenu',
+children: [
+{ label: 'Sub Item 1', value: 'sub1' },
+{ label: 'Sub Item 2', value: 'sub2' }
+]
+},
+{ label: 'Menu Item 3 (Disabled)', value: 'item3', disabled: true }
+],
+trigger: 'click'
+});
 
-                // Pie Chart
-                createPieChart('#pieChart', {
-                    labels: ['Red', 'Blue', 'Yellow'],
-                    datasets: [{
-                        label: 'Distribution',
-                        data: [30, 20, 50],
-                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-                    }]
-                });
+// Tree example
+const tree = new Tree('#tree1', {
+data: [
+{
+label: 'Node 1',
+value: 'node1',
+children: [
+{ label: 'Node 1.1', value: 'node1.1' },
+{ label: 'Node 1.2', value: 'node1.2' }
+]
+},
+{
+label: 'Node 2',
+value: 'node2',
+children: [
+{ label: 'Node 2.1', value: 'node2.1' }
+]
+}
+],
+onChange: (value) => console.log('Tree node selected:', value)
+});
 
-                // Doughnut Chart
-                createDoughnutChart('#doughnutChart', {
-                    labels: ['Small', 'Medium', 'Large'],
-                    datasets: [{
-                        label: 'Sizes',
-                        data: [25, 35, 40],
-                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
-                    }]
-                });
-            } catch (e) {
-                console.log('Chart initialization error:', e.message);
-            }
-        }
+// Message shortcuts
+window.showMessageSuccess = () => {
+showMessage('Success message!', { type: 'success', duration: 3000 });
+};
 
-        // Button examples
-        new Button('#btn1', {
-            variant: 'primary',
-            onClick: () => showMessage('Primary button clicked!')
-        });
+window.showMessageError = () => {
+showMessage('Error message!', { type: 'danger', duration: 3000 });
+};
 
-        new Button('#btn2', {
-            variant: 'secondary',
-            onClick: () => showMessage('Secondary button clicked!')
-        });
+window.showMessageWarning = () => {
+showMessage('Warning message!', { type: 'warning', duration: 3000 });
+};
 
-        new Button('#btn3', {
-            variant: 'danger',
-            onClick: () => showMessage('Danger button clicked!')
-        });
+window.showMessageInfo = () => {
+showMessage('Info message!', { type: 'info', duration: 3000 });
+};
 
-        // Input examples
-        new Input('#input1', {
-            onChange: (value) => console.log('Input 1:', value)
-        });
+// Notification
+window.showNotificationSuccess = () => {
+showNotification({
+type: 'success',
+title: 'Success',
+description: 'Operation completed successfully!'
+});
+};
 
-        new Input('#input2', {
-            type: 'email',
-            onChange: (value) => console.log('Input 2:', value)
-        });
+window.showNotificationError = () => {
+showNotification({
+type: 'danger',
+title: 'Error',
+description: 'Something went wrong!'
+});
+};
 
-        new Input('#input3', {
-            type: 'password',
-            onChange: (value) => console.log('Input 3: password changed')
-        });
+// Modal and Drawer
+window.showModalDemo = () => {
+showModal({
+title: 'Modal Demo',
+content: 'This is a modal dialog. Click OK or Cancel to close.',
+onOk: () => console.log('Modal OK clicked'),
+onCancel: () => console.log('Modal Cancel clicked')
+});
+};
 
-        // Checkbox examples
-        new Checkbox('#check1', {
-            onChange: (checked) => console.log('Checkbox 1:', checked)
-        });
+window.showDrawerDemo = () => {
+showDrawer({
+title: 'Drawer Demo',
+content: 'This is a drawer component. Click outside or the close button to close.',
+onClose: () => console.log('Drawer closed')
+});
+};
 
-        new Checkbox('#check2', {
-            onChange: (checked) => console.log('Checkbox 2:', checked)
-        });
+// Charts (if available)
+initCharts().then(() => {
+console.log('Charts initialized');
+});
 
-        // Radio group example
-        new RadioGroup('#radiogroup-color', {
-            name: 'color',
-            onChange: (value) => console.log('Selected color:', value)
-        });
+// Upload
+const uploadInput = document.getElementById('upload1');
+const uploadInfo = document.getElementById('upload-info');
+if (uploadInput) {
+uploadInput.addEventListener('change', (e) => {
+const files = e.target.files;
+let info = `<p>Selected ${files.length} file(s):</p>
+<ul>`;
+    for (let file of files) {
+    info += `<li>${file.name} (${(file.size / 1024).toFixed(2)} KB)</li>`;
+    }
+    info += '</ul>';
+uploadInfo.innerHTML = info;
+});
+}
 
-        // Select example
-        new Select('#select1', {
-            onChange: (value) => console.log('Selected:', value)
-        });
+// DatePicker
+const dateInput = document.getElementById('datepicker1');
+if (dateInput) {
+dateInput.addEventListener('change', (e) => {
+console.log('Date selected:', e.target.value);
+});
+}
 
-        // Form example
-        new Form('#form1', {
-            fields: [
-                { name: 'username', required: true, minLength: 3 },
-                { name: 'email', required: true, pattern: '^[^@]+@[^@]+$' },
-                { name: 'password', required: true, minLength: 6 }
-            ],
-            onSubmit: (data) => {
-                console.log('Form submitted:', data);
-                showMessage('Form submitted successfully!');
-            }
-        });
+// DateRangePicker
+const startDate = document.getElementById('startDate');
+const endDate = document.getElementById('endDate');
+if (startDate && endDate) {
+startDate.addEventListener('change', () => {
+console.log('Date range selected:', startDate.value, 'to', endDate.value);
+});
+endDate.addEventListener('change', () => {
+console.log('Date range selected:', startDate.value, 'to', endDate.value);
+});
+}
 
-        // Table example
-        const table = createTable({
-            columns: [
-                { key: 'name', title: 'Name' },
-                { key: 'email', title: 'Email' },
-                { key: 'status', title: 'Status' }
-            ],
-            data: [
-                { name: 'John Doe', email: 'john@example.com', status: 'Active' },
-                { name: 'Jane Smith', email: 'jane@example.com', status: 'Pending' },
-                { name: 'Bob Wilson', email: 'bob@example.com', status: 'Active' }
-            ]
-        });
-        document.getElementById('table1').replaceWith(table.getElement());
-
-        // Pagination example
-        const paginationContainer = document.createElement('div');
-        document.getElementById('pagination1').appendChild(paginationContainer);
-        const pagination = new Pagination(paginationContainer, {
-            total: 100,
-            pageSize: 10,
-            onChange: (page) => console.log('Page changed to:', page)
-        });
-
-        // Dropdown example
-        const dropdown = new Dropdown('#dropdown-trigger', {
-            items: [
-                { label: 'Menu Item 1', value: 'item1' },
-                { label: 'Menu Item 2', value: 'item2' },
-                {
-                    label: 'Submenu',
-                    value: 'submenu',
-                    children: [
-                        { label: 'Sub Item 1', value: 'sub1' },
-                        { label: 'Sub Item 2', value: 'sub2' }
-                    ]
-                },
-                { label: 'Menu Item 3 (Disabled)', value: 'item3', disabled: true }
-            ],
-            trigger: 'click'
-        });
-
-        // Tree example
-        const tree = new Tree('#tree1', {
-            data: [
-                {
-                    label: 'Node 1',
-                    value: 'node1',
-                    children: [
-                        { label: 'Node 1.1', value: 'node1.1' },
-                        { label: 'Node 1.2', value: 'node1.2' }
-                    ]
-                },
-                {
-                    label: 'Node 2',
-                    value: 'node2',
-                    children: [
-                        { label: 'Node 2.1', value: 'node2.1' }
-                    ]
-                }
-            ],
-            onChange: (value) => console.log('Tree node selected:', value)
-        });
-
-        // Message shortcuts
-        window.showMessageSuccess = () => {
-            showMessage('Success message!', { type: 'success', duration: 3000 });
-        };
-
-        window.showMessageError = () => {
-            showMessage('Error message!', { type: 'danger', duration: 3000 });
-        };
-
-        window.showMessageWarning = () => {
-            showMessage('Warning message!', { type: 'warning', duration: 3000 });
-        };
-
-        window.showMessageInfo = () => {
-            showMessage('Info message!', { type: 'info', duration: 3000 });
-        };
-
-        // Notification
-        window.showNotificationSuccess = () => {
-            showNotification({
-                type: 'success',
-                title: 'Success',
-                description: 'Operation completed successfully!'
-            });
-        };
-
-        window.showNotificationError = () => {
-            showNotification({
-                type: 'danger',
-                title: 'Error',
-                description: 'Something went wrong!'
-            });
-        };
-
-        // Modal and Drawer
-        window.showModalDemo = () => {
-            showModal({
-                title: 'Modal Demo',
-                content: 'This is a modal dialog. Click OK or Cancel to close.',
-                onOk: () => console.log('Modal OK clicked'),
-                onCancel: () => console.log('Modal Cancel clicked')
-            });
-        };
-
-        window.showDrawerDemo = () => {
-            showDrawer({
-                title: 'Drawer Demo',
-                content: 'This is a drawer component. Click outside or the close button to close.',
-                onClose: () => console.log('Drawer closed')
-            });
-        };
-
-        // Charts (if available)
-        initCharts().then(() => {
-            console.log('Charts initialized');
-        });
-
-        // Upload
-        const uploadInput = document.getElementById('upload1');
-        const uploadInfo = document.getElementById('upload-info');
-        if (uploadInput) {
-            uploadInput.addEventListener('change', (e) => {
-                const files = e.target.files;
-                let info = `<p>Selected ${files.length} file(s):</p><ul>`;
-                for (let file of files) {
-                    info += `<li>${file.name} (${(file.size / 1024).toFixed(2)} KB)</li>`;
-                }
-                info += '</ul>';
-                uploadInfo.innerHTML = info;
-            });
-        }
-
-        // DatePicker
-        const dateInput = document.getElementById('datepicker1');
-        if (dateInput) {
-            dateInput.addEventListener('change', (e) => {
-                console.log('Date selected:', e.target.value);
-            });
-        }
-
-        // DateRangePicker
-        const startDate = document.getElementById('startDate');
-        const endDate = document.getElementById('endDate');
-        if (startDate && endDate) {
-            startDate.addEventListener('change', () => {
-                console.log('Date range selected:', startDate.value, 'to', endDate.value);
-            });
-            endDate.addEventListener('change', () => {
-                console.log('Date range selected:', startDate.value, 'to', endDate.value);
-            });
-        }
-
-        console.log('Playground initialized successfully!');
-    </script>
+console.log('Playground initialized successfully!');
+</script>
 </body>
 
 </html>

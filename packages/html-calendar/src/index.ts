@@ -15,9 +15,15 @@ export class ArgonCalendar {
   private container: HTMLElement;
 
   constructor(container: HTMLElement | string, options: ArgonCalendarOptions = {}) {
-    this.container = typeof container === 'string'
-      ? document.querySelector<HTMLElement>(container)!
-      : container;
+    if (typeof container === 'string') {
+      const element = document.querySelector<HTMLElement>(container);
+      if (!element) {
+        throw new Error(`Calendar container not found for selector: ${container}`);
+      }
+      this.container = element;
+    } else {
+      this.container = container;
+    }
 
     this.calendar = new Calendar(this.container, {
       plugins: [dayGridPlugin, interactionPlugin],

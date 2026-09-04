@@ -71,37 +71,17 @@ export class Form {
   }
 
   /**
-   * Get all form values
+   * Get all form values with proper radio/checkbox group handling
    */
   getValue(): Record<string, any> {
-    const data: Record<string, any> = {};
-
-    Array.from(this.element.elements).forEach((element) => {
-      if (element instanceof HTMLInputElement || 
-          element instanceof HTMLSelectElement || 
-          element instanceof HTMLTextAreaElement) {
-        const name = element.name;
-        if (name) {
-          data[name] = dom.getValue(element);
-        }
-      }
-    });
-
-    return data;
+    return dom.getFormValues(this.element);
   }
 
   /**
-   * Set form values
+   * Set form values with proper radio/checkbox group handling
    */
   setValue(data: Record<string, any>): void {
-    Object.entries(data).forEach(([name, value]) => {
-      const input = Array.from(this.element.elements).find(
-        el => (el as any).name === name
-      ) as HTMLFormElement | undefined;
-      if (input) {
-        dom.setValue(input, value);
-      }
-    });
+    dom.setFormValues(this.element, data);
   }
 
   /**

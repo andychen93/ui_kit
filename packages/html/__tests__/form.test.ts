@@ -68,7 +68,9 @@ describe('Form Component', () => {
       const f = new Form(form);
       const values = f.getValue();
 
-      expect(values.agree).toBe('yes');
+      // Native FormData returns array for checkboxes with same name
+      // Single checkbox returns array if it's checked
+      expect(values.agree).toEqual(['yes']);
       expect(values.newsletter).toBeNull();
     });
 
@@ -90,8 +92,48 @@ describe('Form Component', () => {
       const f = new Form(form);
       const values = f.getValue();
 
-      // Form.getValue should only get one value per name from radio group
-      expect(['red', 'blue', null]).toContain(values.color);
+      // Native FormData returns checked radio value
+      expect(values.color).toBe('red');
+    });
+
+    it('should handle radio group with no selection', () => {
+      const radio1 = document.createElement('input');
+      radio1.type = 'radio';
+      radio1.name = 'color';
+      radio1.value = 'red';
+      form.appendChild(radio1);
+
+      const radio2 = document.createElement('input');
+      radio2.type = 'radio';
+      radio2.name = 'color';
+      radio2.value = 'blue';
+      form.appendChild(radio2);
+
+      const f = new Form(form);
+      const values = f.getValue();
+
+      // No radio selected should not include the field
+      expect(values.color).toBeUndefined();
+    });
+
+    it('should handle radio group value selection in setValue', () => {
+      const radio1 = document.createElement('input');
+      radio1.type = 'radio';
+      radio1.name = 'color';
+      radio1.value = 'red';
+      form.appendChild(radio1);
+
+      const radio2 = document.createElement('input');
+      radio2.type = 'radio';
+      radio2.name = 'color';
+      radio2.value = 'blue';
+      form.appendChild(radio2);
+
+      const f = new Form(form);
+      f.setValue({ color: 'blue' });
+
+      expect(radio1.checked).toBe(false);
+      expect(radio2.checked).toBe(true);
     });
 
     it('should get select values', () => {
@@ -141,10 +183,113 @@ describe('Form Component', () => {
       form.appendChild(checkbox);
 
       const f = new Form(form);
-      f.setValue({ username: 'jane', agree: true });
+      f.setValue({ username: 'jane', agree: ['yes'] });
 
       expect((input as HTMLInputElement).value).toBe('jane');
       expect((checkbox as HTMLInputElement).checked).toBe(true);
+    });
+
+    it('should set single checkbox with boolean', () => {
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.name = 'agree';
+      checkbox.value = 'yes';
+      form.appendChild(checkbox);
+
+      const f = new Form(form);
+      f.setValue({ agree: true });
+
+      expect((checkbox as HTMLInputElement).checked).toBe(true);
+    });
+
+    it('should set multiple checkboxes as array', () => {
+      const checkbox1 = document.createElement('input');
+      checkbox1.type = 'checkbox';
+      checkbox1.name = 'colors';
+      checkbox1.value = 'red';
+      form.appendChild(checkbox1);
+
+      const checkbox2 = document.createElement('input');
+      checkbox2.type = 'checkbox';
+      checkbox2.name = 'colors';
+      checkbox2.value = 'blue';
+      form.appendChild(checkbox2);
+
+      const checkbox3 = document.createElement('input');
+      checkbox3.type = 'checkbox';
+      checkbox3.name = 'colors';
+      checkbox3.value = 'green';
+      form.appendChild(checkbox3);
+
+      const f = new Form(form);
+      f.setValue({ colors: ['red', 'green'] });
+
+      expect((checkbox1 as HTMLInputElement).checked).toBe(true);
+      expect((checkbox2 as HTMLInputElement).checked).toBe(false);
+      expect((checkbox3 as HTMLInputElement).checked).toBe(true);
+    });
+
+    it('should set radio group', () => {
+      const radio1 = document.createElement('input');
+      radio1.type = 'radio';
+      radio1.name = 'color';
+      radio1.value = 'red';
+      form.appendChild(radio1);
+
+      const radio2 = document.createElement('input');
+      radio2.type = 'radio';
+      radio2.name = 'color';
+      radio2.value = 'blue';
+      form.appendChild(radio2);
+
+      const f = new Form(form);
+      f.setValue({ color: 'blue' });
+
+      expect((radio1 as HTMLInputElement).checked).toBe(false);
+      expect((radio2 as HTMLInputElement).checked).toBe(true);
+    });
+
+    it('should set multiple select', () => {
+      const select = document.createElement('select');
+      select.name = 'items';
+      select.multiple = true;
+      const option1 = document.createElement('option');
+      option1.value = 'a';
+      const option2 = document.createElement('option');
+      option2.value = 'b';
+      const option3 = document.createElement('option');
+      option3.value = 'c';
+      select.appendChild(option1);
+      select.appendChild(option2);
+      select.appendChild(option3);
+      form.appendChild(select);
+
+      const f = new Form(form);
+      f.setValue({ items: ['a', 'c'] });
+
+      expect((select as HTMLSelectElement).selectedOptions.length).toBe(2);
+      expect(select.selectedOptions[0].value).toBe('a');
+      expect(select.selectedOptions[1].value).toBe('c');
+    });
+
+    it('should ignore disabled and nameless fields', () => {
+      const input1 = document.createElement('input');
+      input1.type = 'text';
+      input1.name = 'disabled_field';
+      input1.disabled = true;
+      input1.value = 'disabled';
+      form.appendChild(input1);
+
+      const input2 = document.createElement('input');
+      input2.type = 'text';
+      input2.value = 'no name';
+      form.appendChild(input2);
+
+      const f = new Form(form);
+      const values = f.getValue();
+
+      expect(values.disabled_field).toBeUndefined();
+      expect(values['no name']).toBeUndefined();
     });
   });
 

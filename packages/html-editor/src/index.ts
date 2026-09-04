@@ -15,9 +15,15 @@ export class RichText {
   private container: HTMLElement;
 
   constructor(container: HTMLElement | string, options: RichTextOptions = {}) {
-    this.container = typeof container === 'string'
-      ? document.querySelector<HTMLElement>(container)!
-      : container;
+    if (typeof container === 'string') {
+      const element = document.querySelector<HTMLElement>(container);
+      if (!element) {
+        throw new Error(`Editor container not found for selector: ${container}`);
+      }
+      this.container = element;
+    } else {
+      this.container = container;
+    }
 
     this.quill = new Quill(this.container, {
       theme: options.theme || 'snow',

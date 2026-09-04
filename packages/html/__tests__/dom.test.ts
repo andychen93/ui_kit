@@ -93,11 +93,12 @@ describe('DOM Utilities', () => {
         radio.value = 'blue';
         container.appendChild(radio);
 
-        dom.setValue(radio, true);
+        // setValue for radio compares value string with input.value
+        dom.setValue(radio, 'blue');
         expect(radio.checked).toBe(true);
         expect(dom.getValue(radio)).toBe('blue');
 
-        dom.setValue(radio, false);
+        dom.setValue(radio, 'red');
         expect(radio.checked).toBe(false);
         expect(dom.getValue(radio)).toBeNull();
       });

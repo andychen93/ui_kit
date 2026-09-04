@@ -347,7 +347,7 @@ export function setValue(element: HTMLElement, value: string | number | boolean)
   }
   // Check radio first (before general isFormInput)
   if (element instanceof HTMLInputElement && element.type === 'radio') {
-    element.checked = Boolean(value);
+    element.checked = String(value) === element.value;
     return;
   }
   // Now check general form inputs
@@ -359,6 +359,140 @@ export function setValue(element: HTMLElement, value: string | number | boolean)
     element.value = String(value);
     return;
   }
+}
+
+/**
+ * Get all form values with proper radio/checkbox group handling
+ * @param formElement - The form element to get values from
+ * @returns Record of field names to values
+ */
+export function getFormValues(formElement: HTMLFormElement): Record<string, any> {
+  const data: Record<string, any> = {};
+
+  // Group elements by name to handle radio and checkbox groups
+  const elementsByName: Record<string, HTMLElement[]> = {};
+  Array.from(formElement.elements).forEach((element) => {
+    // Skip disabled elements and elements without name (native FormData behavior)
+    // Use element.name directly - all form controls have this property
+    const el = element as HTMLElement & { name?: string; disabled?: boolean };
+    if (el.disabled || !el.name) {
+      return;
+    }
+    const name = el.name;
+    if (!elementsByName[name]) {
+      elementsByName[name] = [];
+    }
+    elementsByName[name].push(el);
+  });
+
+  // Process each group
+  Object.entries(elementsByName).forEach(([name, elements]) => {
+    // Check if all elements are radio buttons (same name, type=radio)
+    const allRadio = elements.every(el => 
+      el instanceof HTMLInputElement && el.type === 'radio'
+    );
+
+    // Check if any element is a checkbox
+    const hasCheckbox = elements.some(el => 
+      el instanceof HTMLInputElement && el.type === 'checkbox'
+    );
+
+    if (allRadio) {
+      // Radio group: return only checked value
+      const checked = elements.find(el => 
+        el instanceof HTMLInputElement && el.checked
+      );
+      if (checked) {
+        data[name] = (checked as HTMLInputElement).value;
+      }
+    } else if (hasCheckbox) {
+      // Checkbox group: return array of checked values
+      const checkedValues = elements
+        .filter(el => el instanceof HTMLInputElement && el.checked)
+        .map(el => (el as HTMLInputElement).value);
+      data[name] = checkedValues.length > 0 ? checkedValues : null;
+    } else {
+      // Single input: get value directly
+      const el = elements[0];
+      if (el instanceof HTMLSelectElement && el.multiple) {
+        data[name] = Array.from(el.selectedOptions).map(o => o.value);
+      } else {
+        data[name] = getValue(el);
+      }
+    }
+  });
+
+  return data;
+}
+
+/**
+ * Set form values with proper radio/checkbox group handling
+ * @param formElement - The form element to set values on
+ * @param data - Record of field names to values
+ */
+export function setFormValues(formElement: HTMLFormElement, data: Record<string, any>): void {
+  Object.entries(data).forEach(([name, value]) => {
+    const elements = Array.from(formElement.elements).filter(
+      el => (el as any).name === name
+    ) as HTMLElement[];
+
+    if (elements.length === 0) return;
+
+    // Check if all elements are radio buttons
+    const allRadio = elements.every(el => 
+      el instanceof HTMLInputElement && el.type === 'radio'
+    );
+
+    // Check if any element is a checkbox
+    const hasCheckbox = elements.some(el => 
+      el instanceof HTMLInputElement && el.type === 'checkbox'
+    );
+
+    if (allRadio) {
+      // Radio group: check only the one with matching value
+      elements.forEach(el => {
+        if (el instanceof HTMLInputElement) {
+          el.checked = String(value) === el.value;
+        }
+      });
+    } else if (hasCheckbox) {
+      // Checkbox group: check elements whose value is in the array
+      // If value is boolean, treat it as single checkbox checked state
+      if (typeof value === 'boolean') {
+        // Single checkbox: set checked state directly
+        elements.forEach(el => {
+          if (el instanceof HTMLInputElement) {
+            el.checked = value;
+          }
+        });
+      } else {
+        // Multiple checkboxes with array of values
+        const valuesArray = Array.isArray(value) ? value : [value];
+        elements.forEach(el => {
+          if (el instanceof HTMLInputElement) {
+            el.checked = valuesArray.includes(el.value);
+          }
+        });
+      }
+    } else {
+      // Handle select multiple separately
+      const el = elements[0];
+      if (el instanceof HTMLSelectElement && el.multiple) {
+        // Clear all selections first
+        Array.from(el.options).forEach(opt => opt.selected = false);
+        // Set selected based on value array
+        const valuesArray = Array.isArray(value) ? value : [value];
+        Array.from(el.options).forEach(opt => {
+          opt.selected = valuesArray.includes(opt.value);
+        });
+      } else {
+        // Single input: set value directly
+        elements.forEach(el => {
+          setValue(el, value);
+        });
+      }
+    }
+  });
 }
 
 /**
