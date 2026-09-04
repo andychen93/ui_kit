@@ -156,7 +156,7 @@ export type { ListOptions, ListItemOptions } from './components/list';
 export { Empty, createEmpty } from './components/empty';
 export type { EmptyOptions } from './components/empty';
 
-export { SweetAlert, createSweetAlert } from './components/sweet-alert';
+export { SweetAlert, createSweetAlert, fireSweetAlert } from './components/sweet-alert';
 export type { SweetAlertOptions } from './components/sweet-alert';
 
 // Phase 8 - Pro Components

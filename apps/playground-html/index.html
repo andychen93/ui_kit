@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:,">
     <title>@argon-kit/html Playground</title>
     <style>
         body {
@@ -33,6 +34,12 @@
             font-size: 18px;
         }
 
+        h3 {
+            margin-top: 24px;
+            color: #444;
+            font-size: 15px;
+        }
+
         button,
         input,
         select,
@@ -45,126 +52,83 @@
             margin: 30px 0;
             border-top: 2px solid #ddd;
         }
+
+        .ag-coverage-panel {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin: 0 0 20px 0;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .ag-coverage-panel--ok {
+            background: #e6f7e6;
+            border: 1px solid #52c41a;
+            color: #237804;
+        }
+
+        .ag-coverage-panel--warning {
+            background: #fff2e8;
+            border: 1px solid #fa8c16;
+            color: #ad4e00;
+        }
+
+        .ag-coverage-panel__missing {
+            margin-top: 6px;
+            font-weight: 400;
+            font-size: 13px;
+        }
     </style>
 </head>
 
 <body>
     <h1>@argon-kit/html Component Playground</h1>
-    <p>Interactive demonstrations of all @argon-kit/html components</p>
+    <p>
+        Interactive demonstrations of every component @argon-kit/html shares with
+        @argon-kit/react, @argon-kit/vue, and @argon-kit/svelte, plus the HTML-only
+        plugin packages (charts, editor, calendar).
+    </p>
 
-    <!-- Basic Components -->
-    <div class="demo">
-        <h2>Button Component</h2>
-        <button id="btn1">Primary Button</button>
-        <button id="btn2">Secondary Button</button>
-        <button id="btn3">Danger Button</button>
+    <!-- Component coverage panel: rendered by src/coverage.ts using the same -->
+    <!-- manifest tests/contract/src/html-exports-parity.test.ts checks against. -->
+    <div id="coverage-panel"></div>
+
+    <!-- General (form basics) -->
+    <div class="demo" id="section-general">
+        <h2>General</h2>
     </div>
 
-    <div class="demo">
-        <h2>Input Component</h2>
-        <input type="text" id="input1" placeholder="Enter text">
-        <input type="email" id="input2" placeholder="Enter email">
-        <input type="password" id="input3" placeholder="Enter password">
+    <!-- Forms -->
+    <div class="demo" id="section-forms">
+        <h2>Forms</h2>
     </div>
 
-    <div class="demo">
-        <h2>Checkbox Component</h2>
-        <div>
-            <input type="checkbox" id="check1">
-            <label for="check1">Agree to terms</label>
-        </div>
-        <div>
-            <input type="checkbox" id="check2">
-            <label for="check2">Subscribe to newsletter</label>
-        </div>
+    <!-- Data display -->
+    <div class="demo" id="section-data-display">
+        <h2>Data Display</h2>
     </div>
 
-    <div class="demo">
-        <h2>Radio Component</h2>
-        <div id="radiogroup-color">
-            <input type="radio" name="color" value="red" id="radio1">
-            <label for="radio1">Red</label>
-            <input type="radio" name="color" value="green" id="radio2">
-            <label for="radio2">Green</label>
-            <input type="radio" name="color" value="blue" id="radio3">
-            <label for="radio3">Blue</label>
-        </div>
+    <!-- Navigation / Layout -->
+    <div class="demo" id="section-navigation">
+        <h2>Navigation &amp; Layout</h2>
     </div>
 
-    <div class="demo">
-        <h2>Select Component</h2>
-        <select id="select1">
-            <option>Choose an option</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
-        </select>
+    <!-- Feedback / Overlay -->
+    <div class="demo" id="section-feedback">
+        <h2>Feedback &amp; Overlay</h2>
     </div>
 
-    <!-- Form Component -->
-    <div class="demo">
-        <h2>Form Component</h2>
-        <form id="form1">
-            <div>
-                <input type="text" name="username" placeholder="Username" required style="display: block; margin: 5px 0;">
-                <input type="email" name="email" placeholder="Email" required style="display: block; margin: 5px 0;">
-                <input type="password" name="password" placeholder="Password" required style="display: block; margin: 5px 0;">
-            </div>
-            <button type="submit">Submit Form</button>
-        </form>
+    <!-- Pro / advanced data -->
+    <div class="demo" id="section-pro">
+        <h2>Pro Components</h2>
     </div>
 
-    <!-- Table Component -->
+    <!-- Charts Component (HTML plugin package) -->
     <div class="demo">
-        <h2>Table Component</h2>
-        <table id="table1"></table>
-    </div>
-
-    <!-- Pagination Component -->
-    <div class="demo">
-        <h2>Pagination Component</h2>
-        <div id="pagination1"></div>
-    </div>
-
-    <!-- Dropdown Component -->
-    <div class="demo">
-        <h2>Dropdown Component</h2>
-        <button id="dropdown-trigger">Open Menu</button>
-        <div id="dropdown1"></div>
-    </div>
-
-    <!-- Tree Component -->
-    <div class="demo">
-        <h2>Tree Component</h2>
-        <ul id="tree1"></ul>
-    </div>
-
-    <!-- Message Component -->
-    <div class="demo">
-        <h2>Message Component</h2>
-        <button onclick="window.showMessageSuccess()">Show Success</button>
-        <button onclick="window.showMessageError()">Show Error</button>
-        <button onclick="window.showMessageWarning()">Show Warning</button>
-        <button onclick="window.showMessageInfo()">Show Info</button>
-    </div>
-
-    <!-- Notification Component -->
-    <div class="demo">
-        <h2>Notification Component</h2>
-        <button onclick="window.showNotificationSuccess()">Success Notification</button>
-        <button onclick="window.showNotificationError()">Error Notification</button>
-    </div>
-
-    <!-- Modal Component -->
-    <div class="demo">
-        <h2>Modal Component</h2>
-        <button onclick="window.showModalDemo()">Open Modal</button>
-        <button onclick="window.showDrawerDemo()">Open Drawer</button>
-    </div>
-
-    <!-- Charts Component -->
-    <div class="demo">
-        <h2>Charts Component</h2>
+        <h2>Charts Component (@argon-kit/html-charts)</h2>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
             <canvas id="lineChart" width="400" height="200"></canvas>
             <canvas id="barChart" width="400" height="200"></canvas>
@@ -173,37 +137,15 @@
         </div>
     </div>
 
-    <!-- Upload Component -->
+    <!-- Editor Component (HTML plugin package) -->
     <div class="demo">
-        <h2>Upload Component</h2>
-        <input type="file" id="upload1" multiple>
-        <div id="upload-info"></div>
-    </div>
-
-    <!-- DatePicker Component -->
-    <div class="demo">
-        <h2>DatePicker Component</h2>
-        <input type="date" id="datepicker1">
-    </div>
-
-    <!-- DateRangePicker Component -->
-    <div class="demo">
-        <h2>DateRangePicker Component</h2>
-        <div>
-            <input type="date" id="startDate" placeholder="Start Date">
-            <input type="date" id="endDate" placeholder="End Date">
-        </div>
-    </div>
-
-    <!-- Editor Component -->
-    <div class="demo">
-        <h2>Editor Component</h2>
+        <h2>Editor Component (@argon-kit/html-editor)</h2>
         <div id="editor1" style="height: 200px;"></div>
     </div>
 
-    <!-- Calendar Component -->
+    <!-- Calendar Component (HTML plugin package) -->
     <div class="demo">
-        <h2>Calendar Component</h2>
+        <h2>Calendar Component (@argon-kit/html-calendar)</h2>
         <div id="calendar1" style="height: 400px;"></div>
     </div>
 
