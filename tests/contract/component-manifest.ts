@@ -3,6 +3,14 @@
  *
  * This file defines the set of components that must be implemented across all
  * framework implementations (React, Vue, Svelte, HTML) for consistent API coverage.
+ *
+ * This list is NOT the source of truth. The source of truth is computed
+ * dynamically at test time in `tests/contract/src/html-exports-parity.test.ts`
+ * as the runtime intersection of React/Vue/Svelte's actual exports. That
+ * test asserts this manifest matches the dynamic computation exactly and
+ * fails (with a clear diff) if they drift — e.g. when a framework adds a
+ * new shared component/export. When that happens, update this list to
+ * match rather than loosening the test.
  */
 
 export const commonComponents = [
@@ -79,6 +87,12 @@ export const commonComponents = [
 
   // Pro components
   'CrudFormModal',
+
+  // Shared runtime utilities re-exported by every framework package
+  // (from @argon-kit/core). Not visual components, but part of the
+  // common public API surface all four implementations must expose.
+  'message',
+  'notification',
 ] as const;
 
 export type CommonComponent = typeof commonComponents[number];

@@ -692,6 +692,9 @@ importers:
       '@argon-kit/editor':
         specifier: workspace:*
         version: link:../../packages/editor
+      '@argon-kit/html':
+        specifier: workspace:*
+        version: link:../../packages/html
       '@argon-kit/icons':
         specifier: workspace:*
         version: link:../../packages/icons
