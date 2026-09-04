@@ -24,8 +24,8 @@ export interface QueryFormOptions {
 export class QueryForm {
   private element: HTMLDivElement;
   private options: QueryFormOptions;
-  private formElement: HTMLFormElement | null;
-  private expandElement: HTMLDivElement | null;
+  private formElement: HTMLFormElement | null = null;
+  private expandElement: HTMLDivElement | null = null;
   private eventManager = new EventManager();
 
   constructor(

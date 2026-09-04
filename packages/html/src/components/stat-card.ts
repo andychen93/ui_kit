@@ -17,7 +17,7 @@ export interface StatCardOptions {
 export class StatCard {
   private element: HTMLDivElement;
   private options: StatCardOptions;
-  private trendElement: HTMLDivElement | null;
+  private trendElement: HTMLDivElement | null = null;
 
   constructor(
     element: HTMLDivElement | string,

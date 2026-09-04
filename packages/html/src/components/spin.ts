@@ -17,8 +17,8 @@ export interface SpinOptions {
 export class Spin {
   private element: HTMLDivElement;
   private options: SpinOptions;
-  private tipElement: HTMLDivElement | null;
-  private spinnerElement: HTMLDivElement | null;
+  private tipElement: HTMLDivElement | null = null;
+  private spinnerElement: HTMLDivElement | null = null;
 
   constructor(
     element: HTMLDivElement | string,

@@ -20,9 +20,9 @@ export interface SliderOptions {
 export class Slider {
   private element: HTMLDivElement;
   private options: SliderOptions;
-  private trackElement: HTMLDivElement | null;
-  private thumbElement: HTMLDivElement | null;
-  private inputElement: HTMLInputElement | null;
+  private trackElement: HTMLDivElement | null = null;
+  private thumbElement: HTMLDivElement | null = null;
+  private inputElement: HTMLInputElement | null = null;
   private eventManager = new EventManager();
   private isDragging: boolean = false;
 

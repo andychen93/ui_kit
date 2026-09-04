@@ -16,7 +16,7 @@ export interface ResultOptions {
 export class Result {
   private element: HTMLDivElement;
   private options: ResultOptions;
-  private iconElement: HTMLDivElement | null;
+  private iconElement: HTMLDivElement | null = null;
 
   constructor(
     element: HTMLDivElement | string,

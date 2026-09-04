@@ -34,10 +34,11 @@ function createSVGElement<K extends keyof SVGElementTagNameMap>(
   const element = document.createElementNS('http://www.w3.org/2000/svg', tag);
 
   if (options?.className) {
-    if (typeof options.className === 'string') {
-      element.className = options.className;
-    } else {
-      element.classList.add(...options.className.filter(Boolean));
+    const classVal = typeof options.className === 'string' 
+      ? options.className 
+      : options.className.filter(Boolean).join(' ');
+    if (classVal) {
+      element.setAttribute('class', classVal);
     }
   }
 
@@ -70,9 +71,9 @@ function createSVGElement<K extends keyof SVGElementTagNameMap>(
 export class Progress {
   private element: HTMLDivElement;
   private options: ProgressOptions;
-  private trackElement: HTMLDivElement | null;
-  private successElement: HTMLDivElement | null;
-  private indicatorElement: HTMLDivElement | null;
+  private trackElement: HTMLDivElement | null = null;
+  private successElement: HTMLDivElement | null = null;
+  private indicatorElement: HTMLDivElement | null = null;
   private eventManager = new EventManager();
 
   constructor(
