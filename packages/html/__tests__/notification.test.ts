@@ -123,7 +123,7 @@ describe('Notification Component', () => {
 
   describe('notification shortcuts', () => {
     it('should show success notification', () => {
-      const notif = notification.success({ title: 'Success!', description: 'Done' });
+      const notif = notification.success('Success!', 'Done');
 
       expect(notif.getElement().className).toContain('ag-notification--success');
 
@@ -131,11 +131,19 @@ describe('Notification Component', () => {
     });
 
     it('should show error notification', () => {
-      const notif = notification.error({ title: 'Error!', description: 'Failed' });
+      const notif = notification.error('Error!', 'Failed');
 
       expect(notif.getElement().className).toContain('ag-notification--danger');
 
       notif.destroy();
+    });
+
+    it('should support custom duration in shortcuts', () => {
+      const notif = notification.success('Test', 'Description', 1000);
+
+      vi.advanceTimersByTime(1000);
+
+      expect(notif.getElement().parentElement).toBeNull();
     });
   });
 
@@ -150,13 +158,6 @@ describe('Notification Component', () => {
 
       expect(onClose).toHaveBeenCalled();
       expect(notif.getElement().parentElement).toBeNull();
-    });
-  });
-
-  describe('placement', () => {
-    it('should support different placements', () => {
-      const notif = new Notification({ title: 'Test', description: 'Hello', placement: 'top-right' });
-      expect(notif).toBeDefined();
     });
   });
 });

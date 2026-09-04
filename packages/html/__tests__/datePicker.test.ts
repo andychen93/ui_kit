@@ -134,8 +134,8 @@ describe('DateRangePicker Component', () => {
 
     it('should accept options', () => {
       const dateRangePicker = new DateRangePicker(startDateInput, endDateInput, {
-        startDate: '2024-01-01',
-        endDate: '2024-12-31',
+        startValue: '2024-01-01',
+        endValue: '2024-12-31',
         onChange: () => {}
       });
       expect(dateRangePicker).toBeDefined();
@@ -215,7 +215,10 @@ describe('Date Picker Factory Functions', () => {
   });
 
   it('should create DateRangePicker with createDateRangePicker', () => {
-    const dateRangePicker = createDateRangePicker(startDateInput, endDateInput);
+    const dateRangePicker = createDateRangePicker({
+      startValue: '2024-01-01',
+      endValue: '2024-12-31'
+    });
     expect(dateRangePicker).toBeInstanceOf(DateRangePicker);
     dateRangePicker.destroy();
   });
