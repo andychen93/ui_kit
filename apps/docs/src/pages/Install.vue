@@ -23,12 +23,21 @@ export function App() {
 <\/script>
 
 <Button variant="primary">保存</Button>`,
+  html: `<link rel="stylesheet" href="@argon-kit/styles/dist/index.css">
+
+<button id="save-btn">保存</button>
+
+<script type="module">
+  import { Button } from '@argon-kit/html'
+
+  new Button('#save-btn', { variant: 'primary' })
+<\/script>`,
 };
 </script>
 
 <template>
   <h1>安装</h1>
-  <p class="doc-lead">按你使用的框架安装对应包，并引入一次样式。顶栏可切换 Vue / React / Svelte。</p>
+  <p class="doc-lead">按你使用的框架安装对应包，并引入一次样式。顶栏可切换 Vue / React / Svelte / HTML。</p>
 
   <h2>包管理器</h2>
   <pre class="doc-install">pnpm add {{ pkg }} @argon-kit/styles</pre>

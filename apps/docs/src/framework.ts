@@ -1,6 +1,6 @@
 import { inject, provide, ref, type InjectionKey, type Ref } from "vue";
 
-export type Framework = "vue" | "react" | "svelte";
+export type Framework = "vue" | "react" | "svelte" | "html";
 
 const KEY: InjectionKey<Ref<Framework>> = Symbol("framework");
 

@@ -3,7 +3,7 @@ import { RouterLink, RouterView } from "vue-router";
 import { provideFramework, type Framework } from "../framework";
 
 const { framework, select } = provideFramework();
-const fws: Framework[] = ["vue", "react", "svelte"];
+const fws: Framework[] = ["vue", "react", "svelte", "html"];
 
 const nav = [
   {

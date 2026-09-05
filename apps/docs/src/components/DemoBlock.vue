@@ -21,7 +21,7 @@ watch(framework, (v) => {
 
 const code = computed(() => props.codes?.[tab.value] ?? "");
 const tabs = computed(
-  () => (["vue", "react", "svelte"] as Framework[]).filter((t) => props.codes?.[t]),
+  () => (["vue", "react", "svelte", "html"] as Framework[]).filter((t) => props.codes?.[t]),
 );
 </script>
 
