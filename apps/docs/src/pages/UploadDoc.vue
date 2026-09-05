@@ -9,6 +9,14 @@ const uploadCodes = {
   vue: `<Upload v-model="files" multiple />`,
   react: `<Upload files={files} onChange={setFiles} multiple />`,
   svelte: `<Upload bind:files multiple />`,
+  html: `<div id="upload"></div>
+<script type="module">
+  import { Upload } from '@argon-kit/html'
+  const upload = new Upload('#upload', {
+    multiple: true,
+    onUpload: (files) => console.log(files),
+  })
+<\/script>`,
 };
 </script>
 

@@ -11,6 +11,17 @@ const demoCodes = {
   vue: `<Slider v-model="value" />`,
   react: `<Slider value={value} onChange={setValue} />`,
   svelte: `<Slider bind:value />`,
+  html: `<div id="slider"></div>
+<script type="module">
+  import { Slider } from '@argon-kit/html'
+  const slider = new Slider('#slider', {
+    value: 30,
+    min: 0,
+    max: 100,
+    step: 1,
+    onChange: (v) => console.log(v),
+  })
+<\/script>`,
 };
 </script>
 

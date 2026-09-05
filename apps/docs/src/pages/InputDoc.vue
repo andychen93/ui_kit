@@ -12,6 +12,14 @@ const inputCodes = {
   vue: `<Input v-model="name" placeholder="请输入姓名" />`,
   react: `<Input value={name} onChange={e => setName(e.target.value)} placeholder="请输入姓名" />`,
   svelte: `<Input bind:value={name} placeholder="请输入姓名" />`,
+  html: `<input id="name" />
+<script type="module">
+  import { Input } from '@argon-kit/html'
+  new Input('#name', {
+    placeholder: '请输入姓名',
+    onChange: (value) => console.log(value),
+  })
+<\/script>`,
 };
 </script>
 

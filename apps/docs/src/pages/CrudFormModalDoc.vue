@@ -61,6 +61,23 @@ const codes = {
   onsuccess={refresh}
   oncancel={() => (open = false)}
 />`,
+  html: `<div id="crud"></div>
+<script type="module">
+  import { CrudFormModal } from '@argon-kit/html'
+  const modal = new CrudFormModal('#crud', {
+    title: '新增车辆',
+    fields: [
+      { name: 'plateNo', label: '车牌号', required: true },
+      { name: 'active', label: '是否启用', type: 'switch' },
+      { name: 'remark', label: '备注', type: 'textarea' },
+    ],
+    onOk: async (values) => {
+      await saveVehicle(values)
+    },
+  })
+  // 新增：modal.setMode('create'); modal.show()
+  // 编辑：modal.setMode('edit'); modal.setValues(record); modal.show()
+<\/script>`,
 };
 
 function openCreate() {

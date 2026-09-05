@@ -48,6 +48,38 @@ const tableCodes = {
 <Pagination current={page} pageSize={10} total={30} onChange={setPage} />`,
   svelte: `<Table {columns} {data} rowKey="id" />
 <Pagination current={page} pageSize={10} total={30} onchange={onChange} />`,
+  html: `<table id="tbl"></table>
+<div id="pager"></div>
+<script type="module">
+  import { Table, Pagination, message } from '@argon-kit/html'
+  new Table('#tbl', {
+    columns: [
+      { key: 'name', title: '姓名', dataIndex: 'name' },
+      { key: 'email', title: '邮箱', dataIndex: 'email' },
+      {
+        key: 'actions',
+        title: '操作',
+        render: (value, record) => {
+          const btn = document.createElement('button')
+          btn.textContent = '编辑'
+          btn.addEventListener('click', () => message.info('编辑 ' + record.name))
+          return btn
+        },
+      },
+    ],
+    data: [
+      { id: 1, name: 'Alice', email: 'alice@example.com' },
+      { id: 2, name: 'Bob', email: 'bob@example.com' },
+    ],
+    onRowClick: (record) => console.log(record),
+  })
+  new Pagination('#pager', {
+    total: 30,
+    pageSize: 10,
+    current: 1,
+    onChange: (page) => console.log(page),
+  })
+<\/script>`,
 };
 
 function itemsFor(record: User) {
@@ -87,7 +119,20 @@ const fixedCodes = {
   { key: 'ops', title: '操作', fixed: 'right', width: 160, align: 'center' },
 ];
 
-<Table {columns} {data} rowKey="id" scrollX={640} />`,
+  <Table {columns} {data} rowKey="id" scrollX={640} />`,
+  html: `<table id="fixed-tbl"></table>
+<script type="module">
+  import { Table } from '@argon-kit/html'
+  new Table('#fixed-tbl', {
+    scrollX: 640,
+    columns: [
+      { key: 'name', title: '名称', dataIndex: 'name', fixed: 'left', width: 120, sorter: (a, b) => a.name.localeCompare(b.name) },
+      { key: 'remark', title: '备注', dataIndex: 'remark', ellipsis: true },
+      { key: 'ops', title: '操作', fixed: 'right', width: 160, align: 'center' },
+    ],
+    data: rows,
+  })
+<\/script>`,
 };
 </script>
 

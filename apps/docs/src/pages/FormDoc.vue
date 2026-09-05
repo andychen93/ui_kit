@@ -39,6 +39,20 @@ const values = await formRef.value.validate();`,
     <Input bind:value={model.username} />
   </FormItem>
 </Form>`,
+  html: `<form id="form">
+  <input name="username" placeholder="2-20 字符" />
+  <input name="email" placeholder="选填" />
+</form>
+<script type="module">
+  import { Form } from '@argon-kit/html'
+  const form = new Form('#form', {
+    fields: [
+      { name: 'username', required: true, minLength: 2, maxLength: 20 },
+      { name: 'email', pattern: '^[^@]+@[^@]+\\.[^@]+$' },
+    ],
+    onSubmit: (values) => console.log(values),
+  })
+<\/script>`,
 };
 
 async function submit() {

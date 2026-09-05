@@ -13,6 +13,17 @@ const modalCodes = {
   vue: `<Modal :open="open" title="编辑用户" @close="open = false">内容</Modal>`,
   react: `<Modal open={open} title="编辑用户" onClose={() => setOpen(false)}>内容</Modal>`,
   svelte: `<Modal {open} title="编辑用户" onclose={() => (open = false)}>内容</Modal>`,
+  html: `<button id="open-modal">打开 Modal</button>
+<button id="open-drawer">打开 Drawer</button>
+<script type="module">
+  import { showModal, showDrawer } from '@argon-kit/html'
+  document.querySelector('#open-modal').addEventListener('click', () => {
+    showModal({ title: '编辑用户', content: '内容' })
+  })
+  document.querySelector('#open-drawer').addEventListener('click', () => {
+    showDrawer({ title: '详情', content: '内容' })
+  })
+<\/script>`,
 };
 
 const confirmCodes = {
@@ -46,6 +57,18 @@ const confirmCodes = {
 >
   内容
 </Modal>`,
+  html: `<button id="open">打开提交示例</button>
+<script type="module">
+  import { showModal } from '@argon-kit/html'
+  document.querySelector('#open').addEventListener('click', () => {
+    showModal({
+      title: '提交示例',
+      content: '内容',
+      onOk: () => console.log('confirmed'),
+      onCancel: () => console.log('cancelled'),
+    })
+  })
+<\/script>`,
 };
 
 async function handleConfirm() {

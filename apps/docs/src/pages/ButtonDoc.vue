@@ -34,16 +34,32 @@ const basicCodes = {
   vue: `<Button variant="primary">primary</Button>`,
   react: `<Button variant="primary">primary</Button>`,
   svelte: `<Button variant="primary">primary</Button>`,
+  html: `<button id="btn">primary</button>
+<script type="module">
+  import { Button } from '@argon-kit/html'
+  new Button('#btn', { variant: 'primary' })
+<\/script>`,
 };
 const socialCodes = {
   vue: `<Button variant="social-facebook">Facebook</Button>\n<Button variant="social-twitter">Twitter</Button>`,
   react: `<Button variant="social-facebook">Facebook</Button>\n<Button variant="social-twitter">Twitter</Button>`,
   svelte: `<Button variant="social-facebook">Facebook</Button>\n<Button variant="social-twitter">Twitter</Button>`,
+  html: `<button id="fb">Facebook</button>\n<button id="tw">Twitter</button>
+<script type="module">
+  import { Button } from '@argon-kit/html'
+  new Button('#fb', { variant: 'social-facebook' })
+  new Button('#tw', { variant: 'social-twitter' })
+<\/script>`,
 };
 const gradientCodes = {
   vue: `<Button variant="gradient-primary">primary</Button>`,
   react: `<Button variant="gradient-primary">primary</Button>`,
   svelte: `<Button variant="gradient-primary">primary</Button>`,
+  html: `<button id="btn">primary</button>
+<script type="module">
+  import { Button } from '@argon-kit/html'
+  new Button('#btn', { variant: 'gradient-primary' })
+<\/script>`,
 };
 </script>
 

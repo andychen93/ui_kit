@@ -16,11 +16,29 @@ const basicCodes = {
   vue: `<Steps :items="items" :current="1" />`,
   react: `<Steps items={items} current={1} />`,
   svelte: `<Steps items={items} current={1} />`,
+  html: `<div id="steps"></div>
+<script type="module">
+  import { Steps } from '@argon-kit/html'
+  const steps = new Steps('#steps', { current: 1 })
+  steps.addItem({ title: '填写基本信息', description: '车牌、车型、VIN' })
+  steps.addItem({ title: '绑定设备', description: '选择终端与 SIM' })
+  steps.addItem({ title: '指派车队' })
+  steps.addItem({ title: '完成' })
+<\/script>`,
 };
 const verticalCodes = {
   vue: `<Steps :items="items" :current="2" direction="vertical" />`,
   react: `<Steps items={items} current={2} direction="vertical" />`,
   svelte: `<Steps items={items} current={2} direction="vertical" />`,
+  html: `<div id="steps-v"></div>
+<script type="module">
+  import { Steps } from '@argon-kit/html'
+  const steps = new Steps('#steps-v', { current: 2, direction: 'vertical' })
+  steps.addItem({ title: '填写基本信息', description: '车牌、车型、VIN' })
+  steps.addItem({ title: '绑定设备', description: '选择终端与 SIM' })
+  steps.addItem({ title: '指派车队' })
+  steps.addItem({ title: '完成' })
+<\/script>`,
 };
 </script>
 

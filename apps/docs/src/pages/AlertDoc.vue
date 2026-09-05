@@ -9,11 +9,26 @@ const basicCodes = {
   vue: `<Alert variant="success"><strong>成功！</strong> 这是一条成功提示。</Alert>`,
   react: `<Alert variant="success"><strong>成功！</strong> 这是一条成功提示。</Alert>`,
   svelte: `<Alert variant="success"><strong>成功！</strong> 这是一条成功提示。</Alert>`,
+  html: `<div id="alert"></div>
+<script type="module">
+  import { Alert } from '@argon-kit/html'
+  new Alert('#alert', { variant: 'success', title: '成功！', description: '这是一条成功提示。' })
+<\/script>`,
 };
 const dismissibleCodes = {
   vue: `<Alert variant="danger" dismissible @close="onClose">可关闭的危险提示</Alert>`,
   react: `<Alert variant="danger" dismissible onClose={onClose}>可关闭的危险提示</Alert>`,
   svelte: `<Alert variant="danger" dismissible onclose={onClose}>可关闭的危险提示</Alert>`,
+  html: `<div id="alert"></div>
+<script type="module">
+  import { Alert } from '@argon-kit/html'
+  new Alert('#alert', {
+    variant: 'danger',
+    closeable: true,
+    description: '可关闭的危险提示',
+    onClose: () => console.log('closed'),
+  })
+<\/script>`,
 };
 </script>
 

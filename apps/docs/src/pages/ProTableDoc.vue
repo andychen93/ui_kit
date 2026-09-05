@@ -79,6 +79,21 @@ const proCodes = {
   svelte: `<ProTable {service} {columns} rowKey="id" {querySchema}>
   {#snippet toolbar()}<Button>新建</Button>{/snippet}
 </ProTable>`,
+  html: `<div id="table"></div>
+<script type="module">
+  import { ProTable } from '@argon-kit/html'
+  const table = new ProTable('#table', {
+    columns: [
+      { key: 'name', title: '姓名', dataIndex: 'name' },
+      { key: 'email', title: '邮箱', dataIndex: 'email' },
+    ],
+    request: async ({ current, pageSize }) => {
+      const data = await fetchUsers({ page: current, size: pageSize })
+      return { data: data.list, total: data.total }
+    },
+  })
+  // 查询：table.search({ name: '张' })；刷新：table.reload()
+<\/script>`,
 };
 </script>
 

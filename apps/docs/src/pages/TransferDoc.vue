@@ -15,6 +15,20 @@ const codes = {
   vue: `<Transfer v-model="keys" :data="data" />`,
   react: `<Transfer value={keys} onChange={setKeys} data={data} />`,
   svelte: `<Transfer bind:value={keys} {data} />`,
+  html: `<div id="transfer"></div>
+<script type="module">
+  import { Transfer } from '@argon-kit/html'
+  new Transfer('#transfer', {
+    dataSource: [
+      { key: '1', title: '前端' },
+      { key: '2', title: '后端' },
+      { key: '3', title: '测试' },
+      { key: '4', title: '产品' },
+    ],
+    targetKeys: ['2'],
+    onChange: (targetKeys) => console.log(targetKeys),
+  })
+<\/script>`,
 };
 </script>
 

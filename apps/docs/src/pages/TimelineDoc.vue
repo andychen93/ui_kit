@@ -14,6 +14,13 @@ const demoCodes = {
   vue: `<Timeline :items="[\n  { content: '创建工单', time: '09:30', color: 'primary' },\n  { content: '维修完成', color: 'success' },\n]" />`,
   react: `<Timeline items={[\n  { content: '创建工单', time: '09:30', color: 'primary' },\n  { content: '维修完成', color: 'success' },\n]} />`,
   svelte: `<Timeline items={[\n  { content: '创建工单', time: '09:30', color: 'primary' },\n  { content: '维修完成', color: 'success' },\n]} />`,
+  html: `<div id="tl"></div>
+<script type="module">
+  import { Timeline } from '@argon-kit/html'
+  const tl = new Timeline('#tl')
+  tl.addItem('创建工单 09:30', '#5e72e4')
+  tl.addItem('维修完成', '#2dce89')
+<\/script>`,
 };
 </script>
 

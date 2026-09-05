@@ -9,6 +9,18 @@ const codes = {
   vue: `<Tabs :items="items" :active="tab" @change="tab = $event" />`,
   react: `<Tabs items={items} active={tab} onChange={setTab}>{panel}</Tabs>`,
   svelte: `<Tabs {items} active={tab} onchange={setTab}>{panel}</Tabs>`,
+  html: `<div id="tabs"></div>
+<script type="module">
+  import { Tabs } from '@argon-kit/html'
+  new Tabs('#tabs', {
+    activeKey: 'account',
+    tabs: [
+      { key: 'account', title: '默认登录', content: '账号密码' },
+      { key: 'tenant', title: '租户登录', content: '带租户' },
+    ],
+    onChange: (key) => console.log(key),
+  })
+<\/script>`,
 };
 </script>
 

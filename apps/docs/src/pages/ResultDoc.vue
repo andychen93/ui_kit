@@ -9,6 +9,16 @@ const codes = {
 </Result>`,
   react: `<Result status="403" extra={<Button>返回首页</Button>} />`,
   svelte: `<Result status="403">{#snippet extra()}<Button>返回首页</Button>{/snippet}</Result>`,
+  html: `<div id="result"></div>
+<script type="module">
+  import { Result } from '@argon-kit/html'
+  new Result('#result', {
+    icon: 'error',
+    title: '403',
+    description: '抱歉，您没有权限访问此页面。',
+    extra: '返回首页',
+  })
+<\/script>`,
 };
 </script>
 

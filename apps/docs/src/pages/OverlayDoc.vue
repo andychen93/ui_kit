@@ -9,6 +9,16 @@ const overlayCodes = {
   react: `<Tooltip title="提示文字"><Button>悬停</Button></Tooltip>
 <Popover content="面板内容"><Button>点击</Button></Popover>`,
   svelte: `<Tooltip title="提示文字"><Button>悬停</Button></Tooltip>`,
+  html: `<button id="tip">悬停</button>
+<button id="pop">点击</button>
+<script type="module">
+  import { createTooltip, createPopover } from '@argon-kit/html'
+  createTooltip('#tip', { title: '提示文字' })
+  createPopover('#pop', {
+    content: '面板内容',
+    trigger: 'click',
+  })
+<\/script>`,
 };
 const menuCodes = {
   vue: `<Dropdown :items="items" @select="onSelect" />
@@ -17,6 +27,21 @@ const menuCodes = {
 <Popconfirm title="确定删除？" onConfirm={onDelete} />`,
   svelte: `<Dropdown {items} onselect={onSelect} />
 <Popconfirm title="确定删除？" onconfirm={onDelete} />`,
+  html: `<button id="more">更多</button>
+<button id="del">删除</button>
+<script type="module">
+  import { Dropdown, createPopconfirm, message } from '@argon-kit/html'
+  new Dropdown('#more', {
+    items: [
+      { label: '编辑', value: 'edit', onClick: () => message.info('edit') },
+      { label: '删除', value: 'del' },
+    ],
+  })
+  createPopconfirm('#del', {
+    title: '确定删除？',
+    onConfirm: () => message.success('已删除'),
+  })
+<\/script>`,
 };
 
 function onSelect(k: string) {

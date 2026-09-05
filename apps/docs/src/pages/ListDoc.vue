@@ -15,16 +15,34 @@ const listCodes = {
   vue: `<List :items="items" header="车辆列表" bordered />`,
   react: `<List items={items} header="车辆列表" bordered />`,
   svelte: `<List items={items} bordered>{#snippet header()}车辆列表{/snippet}</List>`,
+  html: `<div id="list"></div>
+<script type="module">
+  import { List } from '@argon-kit/html'
+  const list = new List('#list', { bordered: true })
+  list.addItem({ title: '京A·12345', description: '行驶中 · 华北一队' })
+  list.addItem({ title: '京B·67890', description: '怠速 · 华北二队' })
+<\/script>`,
 };
 const loadingCodes = {
   vue: `<List :items="[]" loading />`,
   react: `<List items={[]} loading />`,
   svelte: `<List items={[]} loading />`,
+  html: `<div id="list"></div>
+<script type="module">
+  import { List } from '@argon-kit/html'
+  const list = new List('#list')
+  // loading 态由外层 Spin / CSS 控制，html 版 List 本身不渲染 loading
+<\/script>`,
 };
 const emptyCodes = {
   vue: `<Empty description="暂无车辆">\n  <template #extra><Button size="sm">新增车辆</Button></template>\n</Empty>`,
   react: `<Empty description="暂无车辆" extra={<Button size="sm">新增车辆</Button>} />`,
   svelte: `<Empty description="暂无车辆">\n  {#snippet extra()}<Button size="sm">新增车辆</Button>{/snippet}\n</Empty>`,
+  html: `<div id="empty"></div>
+<script type="module">
+  import { Empty } from '@argon-kit/html'
+  new Empty('#empty', { description: '暂无车辆' })
+<\/script>`,
 };
 </script>
 

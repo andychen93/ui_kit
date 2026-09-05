@@ -7,11 +7,23 @@ const basicCodes = {
   vue: `<Card title="卡片标题" extra="3 条记录">\n  <p>卡片内容</p>\n  <template #footer>更新于 2026-08-28</template>\n</Card>`,
   react: `<Card title="卡片标题" extra="3 条记录" footer="更新于 2026-08-28">\n  <p>卡片内容</p>\n</Card>`,
   svelte: `<Card title="卡片标题">\n  <p>卡片内容</p>\n  {#snippet footer()}更新于 2026-08-28{/snippet}\n</Card>`,
+  html: `<div id="card"></div>
+<script type="module">
+  import { Card } from '@argon-kit/html'
+  const card = new Card('#card', { title: '卡片标题', extra: '3 条记录' })
+  card.getElement().querySelector('.ag-card-body')!.textContent = '卡片内容'
+<\/script>`,
 };
 const noBodyCodes = {
   vue: `<Card title="表格卡片" noBody>\n  <Table :columns="cols" :rows="rows" />\n</Card>`,
   react: `<Card title="表格卡片" noBody>\n  <Table columns={cols} rows={rows} />\n</Card>`,
   svelte: `<Card title="表格卡片" noBody>\n  <Table columns={cols} rows={rows} />\n</Card>`,
+  html: `<div id="card"></div>
+<script type="module">
+  import { Card } from '@argon-kit/html'
+  const card = new Card('#card', { title: '表格卡片' })
+  card.getElement().querySelector('.ag-card-body')!.textContent = '' // noBody：自行填充内容
+<\/script>`,
 };
 </script>
 

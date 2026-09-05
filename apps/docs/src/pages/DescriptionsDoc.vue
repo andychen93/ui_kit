@@ -15,6 +15,13 @@ const demoCodes = {
   vue: `<Descriptions title="车辆详情" :items="items" border />`,
   react: `<Descriptions title="车辆详情" items={items} border />`,
   svelte: `<Descriptions title="车辆详情" items={items} border />`,
+  html: `<div id="desc"></div>
+<script type="module">
+  import { Descriptions } from '@argon-kit/html'
+  const desc = new Descriptions('#desc', { title: '车辆详情', bordered: true })
+  desc.addItem({ label: '车牌号', content: '京A·12345' })
+  desc.addItem({ label: '车型', content: '东风天龙 KL 460' })
+<\/script>`,
 };
 </script>
 

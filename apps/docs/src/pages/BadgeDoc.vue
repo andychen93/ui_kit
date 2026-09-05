@@ -9,11 +9,23 @@ const badgeCodes = {
   vue: `<Badge variant="primary">12</Badge>\n<Badge variant="success" pill>Pill</Badge>`,
   react: `<Badge variant="primary">12</Badge>\n<Badge variant="success" pill>Pill</Badge>`,
   svelte: `<Badge variant="primary">12</Badge>\n<Badge variant="success" pill>Pill</Badge>`,
+  html: `<div id="b1"></div>\n<div id="b2"></div>
+<script type="module">
+  import { Badge } from '@argon-kit/html'
+  new Badge('#b1', { count: 12, variant: 'primary' })
+  new Badge('#b2', { count: 'Pill', variant: 'success' })
+<\/script>`,
 };
 const tagCodes = {
   vue: `<Tag variant="success">启用</Tag>\n<Tag variant="danger" closable @close="onClose">禁用</Tag>`,
   react: `<Tag variant="success">启用</Tag>\n<Tag variant="danger" closable onClose={onClose}>禁用</Tag>`,
   svelte: `<Tag variant="success">启用</Tag>\n<Tag variant="danger" closable onclose={onClose}>禁用</Tag>`,
+  html: `<span id="t1">启用</span>\n<span id="t2">禁用</span>
+<script type="module">
+  import { Tag } from '@argon-kit/html'
+  new Tag('#t1', { variant: 'success' })
+  new Tag('#t2', { variant: 'danger', closeable: true, onClose: () => console.log('closed') })
+<\/script>`,
 };
 </script>
 

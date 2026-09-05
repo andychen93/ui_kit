@@ -13,6 +13,19 @@ const dateCodes = {
 <RangePicker value={range} onChange={setRange} />`,
   svelte: `<DatePicker bind:value={day} allowClear />
 <RangePicker bind:value={range} />`,
+  html: `<input id="day" />
+<input id="rangeStart" />
+<input id="rangeEnd" />
+<script type="module">
+  import { DatePicker, RangePicker } from '@argon-kit/html'
+  new DatePicker('#day', {
+    value: '2026-08-28',
+    onChange: (v) => console.log(v),
+  })
+  new RangePicker('#rangeStart', '#rangeEnd', {
+    onChange: (values) => console.log(values),
+  })
+<\/script>`,
 };
 </script>
 

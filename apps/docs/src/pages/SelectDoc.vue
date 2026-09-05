@@ -15,6 +15,19 @@ const selectCodes = {
   vue: `<Select v-model="city" :options="options" allow-clear />`,
   react: `<Select value={city} onChange={setCity} options={options} allowClear />`,
   svelte: `<Select bind:value={city} {options} allowClear />`,
+  html: `<select id="city"></select>
+<script type="module">
+  import { Select } from '@argon-kit/html'
+  new Select('#city', {
+    options: [
+      { label: '北京', value: 'bj' },
+      { label: '上海', value: 'sh' },
+      { label: '深圳', value: 'sz' },
+    ],
+    placeholder: '选择城市',
+    onChange: (v) => console.log(v),
+  })
+<\/script>`,
 };
 </script>
 

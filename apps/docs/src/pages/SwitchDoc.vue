@@ -9,6 +9,11 @@ const switchCodes = {
   vue: `<Switch v-model="on" />`,
   react: `<Switch checked={on} onChange={setOn} />`,
   svelte: `<Switch bind:checked={on} />`,
+  html: `<div id="sw"></div>
+<script type="module">
+  import { Switch } from '@argon-kit/html'
+  new Switch('#sw', { checked: true, onChange: (checked) => console.log(checked) })
+<\/script>`,
 };
 </script>
 

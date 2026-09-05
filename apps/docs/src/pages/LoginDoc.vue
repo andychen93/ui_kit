@@ -11,6 +11,19 @@ const codes = {
 />`,
   react: `<Login title="Argon UI Kit" onSubmit={onSubmit} />`,
   svelte: `<Login title="Argon UI Kit" onsubmit={onSubmit} />`,
+  html: `<div id="login"></div>
+<script type="module">
+  import { Login } from '@argon-kit/html'
+  const login = new Login('#login', {
+    title: 'Argon UI Kit',
+    submitText: '登录',
+  })
+  login.getForm().addEventListener('submit', (e) => {
+    e.preventDefault()
+    const data = new FormData(login.getForm())
+    console.log(data.get('username'), data.get('password'))
+  })
+<\/script>`,
 };
 
 function onSubmit(v: { username: string; password: string; tenantCode?: string }) {

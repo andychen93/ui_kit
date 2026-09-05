@@ -20,6 +20,19 @@ const demoCodes = {
   vue: `<SweetAlert\n  v-model:open="open"\n  type="warning"\n  title="确认删除？"\n  content="删除后不可恢复"\n  show-cancel\n  @confirm="onConfirm"\n  @cancel="onCancel"\n/>`,
   react: `<SweetAlert\n  open={open}\n  type="warning"\n  title="确认删除？"\n  content="删除后不可恢复"\n  showCancel\n  onConfirm={onConfirm}\n  onCancel={onCancel}\n/>`,
   svelte: `<SweetAlert\n  open={open}\n  type="warning"\n  title="确认删除？"\n  content="删除后不可恢复"\n  showCancel\n  onconfirm={onConfirm}\n  oncancel={onCancel}\n/>`,
+  html: `<button id="btn">warning</button>
+<script type="module">
+  import { fireSweetAlert } from '@argon-kit/html'
+  document.querySelector('#btn').addEventListener('click', async () => {
+    const { confirmed } = await fireSweetAlert({
+      type: 'warning',
+      title: '确认删除？',
+      description: '删除后不可恢复',
+      showCancel: true,
+    })
+    console.log(confirmed ? 'confirm' : 'cancel')
+  })
+<\/script>`,
 };
 
 function openPreset(p: (typeof presets)[number]) {

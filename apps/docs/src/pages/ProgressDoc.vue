@@ -7,11 +7,25 @@ const basicCodes = {
   vue: `<Progress :percent="62" variant="primary" show-label />`,
   react: `<Progress percent={62} variant="primary" showLabel />`,
   svelte: `<Progress percent={62} variant="primary" showLabel />`,
+  html: `<div id="progress"></div>
+<script type="module">
+  import { Progress } from '@argon-kit/html'
+  new Progress('#progress', {
+    percent: 62,
+    variant: 'primary',
+    format: (p) => p + '%',
+  })
+<\/script>`,
 };
 const styleCodes = {
   vue: `<Progress :percent="70" variant="gradient-primary" thin />`,
   react: `<Progress percent={70} variant="gradient-primary" thin />`,
   svelte: `<Progress percent={70} variant="gradient-primary" thin />`,
+  html: `<div id="progress"></div>
+<script type="module">
+  import { Progress } from '@argon-kit/html'
+  new Progress('#progress', { percent: 70, variant: 'gradient-primary' })
+<\/script>`,
 };
 </script>
 

@@ -7,11 +7,28 @@ const basicCodes = {
   vue: `<Avatar src="/img/u1.png" />\n<Avatar size="lg">陈</Avatar>`,
   react: `<Avatar src="/img/u1.png" />\n<Avatar size="lg">陈</Avatar>`,
   svelte: `<Avatar src="/img/u1.png" />\n<Avatar size="lg">陈</Avatar>`,
+  html: `<div id="a1"></div>\n<div id="a2"></div>
+<script type="module">
+  import { Avatar } from '@argon-kit/html'
+  new Avatar('#a1', { src: '/img/u1.png' })
+  new Avatar('#a2', { size: 'lg', alt: '陈' })
+<\/script>`,
 };
 const groupCodes = {
   vue: `<AvatarGroup>\n  <Avatar>陈</Avatar>\n  <Avatar>李</Avatar>\n</AvatarGroup>`,
   react: `<AvatarGroup>\n  <Avatar>陈</Avatar>\n  <Avatar>李</Avatar>\n</AvatarGroup>`,
   svelte: `<AvatarGroup>\n  <Avatar>陈</Avatar>\n  <Avatar>李</Avatar>\n</AvatarGroup>`,
+  html: `<div id="group">
+  <div class="ag-avatar"></div>
+  <div class="ag-avatar"></div>
+</div>
+<script type="module">
+  import { Avatar, AvatarGroup } from '@argon-kit/html'
+  document.querySelectorAll('#group > .ag-avatar').forEach((el, i) => {
+    new Avatar(el as HTMLDivElement, { alt: ['陈', '李'][i] })
+  })
+  new AvatarGroup('#group', { max: 3 })
+<\/script>`,
 };
 </script>
 

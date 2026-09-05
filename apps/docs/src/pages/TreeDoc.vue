@@ -26,6 +26,32 @@ const codes = {
   vue: `<Tree v-model="id" :data="data" />`,
   react: `<Tree value={id} onChange={setId} data={data} />`,
   svelte: `<Tree bind:value={id} {data} />`,
+  html: `<ul id="tree"></ul>
+<script type="module">
+  import { Tree } from '@argon-kit/html'
+  new Tree('#tree', {
+    data: [
+      {
+        label: '组织',
+        value: 'org',
+        expanded: true,
+        children: [
+          {
+            label: '研发',
+            value: 'rd',
+            expanded: true,
+            children: [
+              { label: '前端', value: 'fe' },
+              { label: '后端', value: 'be' },
+            ],
+          },
+          { label: '产品', value: 'prod' },
+        ],
+      },
+    ],
+    onChange: (value) => console.log(value),
+  })
+<\/script>`,
 };
 </script>
 

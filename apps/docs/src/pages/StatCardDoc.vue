@@ -7,6 +7,17 @@ const codes = {
   vue: `<StatCard variant="primary" label="车辆" :value="1280" :progress="72" hint="较昨日 +4%" />`,
   react: `<StatCard variant="primary" label="车辆" value={1280} progress={72} hint="较昨日 +4%" />`,
   svelte: `<StatCard variant="primary" label="车辆" value={1280} progress={72} hint="较昨日 +4%" />`,
+  html: `<div id="stat"></div>
+<script type="module">
+  import { StatCard } from '@argon-kit/html'
+  const card = new StatCard('#stat', {
+    title: '车辆',
+    value: 1280,
+    trend: 'up',
+    trendText: '较昨日 +4%',
+  })
+  // 更新数值：card.setValue(1400)
+<\/script>`,
 };
 </script>
 

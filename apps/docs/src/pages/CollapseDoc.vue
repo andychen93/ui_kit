@@ -11,11 +11,25 @@ const basicCodes = {
   vue: `<Collapse v-model="active">\n  <CollapsePanel panel-key="a" title="面板 A">内容 A</CollapsePanel>\n</Collapse>`,
   react: `<Collapse activeKeys={active} onChange={setActive}>\n  <CollapsePanel panelKey="a" title="面板 A">内容 A</CollapsePanel>\n</Collapse>`,
   svelte: `<Collapse bind:value={active}>\n  <CollapsePanel panelKey="a" title="面板 A">内容 A</CollapsePanel>\n</Collapse>`,
+  html: `<div id="collapse"></div>
+<script type="module">
+  import { Collapse } from '@argon-kit/html'
+  const collapse = new Collapse('#collapse')
+  collapse.addPanel('车辆基本信息', '车牌号京A·12345，车型东风天龙 KL 460。')
+  collapse.addPanel('驾驶行为', '近 30 天急加速 12 次、急刹车 8 次。')
+<\/script>`,
 };
 const accordionCodes = {
   vue: `<Collapse v-model="acc" accordion>…</Collapse>`,
   react: `<Collapse accordion activeKeys={acc} onChange={setAcc}>…</Collapse>`,
   svelte: `<Collapse bind:value={acc} accordion>…</Collapse>`,
+  html: `<div id="collapse"></div>
+<script type="module">
+  import { Collapse } from '@argon-kit/html'
+  const collapse = new Collapse('#collapse', { accordion: true })
+  collapse.addPanel('今日里程', '1,284 km')
+  collapse.addPanel('今日油耗', '412 L')
+<\/script>`,
 };
 </script>
 

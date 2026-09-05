@@ -10,6 +10,14 @@ const checkCodes = {
   vue: `<Checkbox v-model="agree">已阅读协议</Checkbox>`,
   react: `<Checkbox checked={agree} onChange={setAgree}>已阅读协议</Checkbox>`,
   svelte: `<Checkbox bind:checked={agree}>已阅读协议</Checkbox>`,
+  html: `<input id="agree" type="checkbox" />
+<script type="module">
+  import { Checkbox } from '@argon-kit/html'
+  new Checkbox('#agree', {
+    label: '已阅读协议',
+    onChange: (checked) => console.log(checked),
+  })
+<\/script>`,
 };
 </script>
 

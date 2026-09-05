@@ -7,6 +7,13 @@ const messageCodes = {
   vue: `import { message } from '@argon-kit/vue'\nmessage.success('已保存')`,
   react: `import { message } from '@argon-kit/react'\nmessage.success('已保存')`,
   svelte: `import { message } from '@argon-kit/svelte'\nmessage.success('已保存')`,
+  html: `<button id="btn">Success</button>
+<script type="module">
+  import { message } from '@argon-kit/html'
+  document.querySelector('#btn').addEventListener('click', () => {
+    message.success('已保存')
+  })
+<\/script>`,
 };
 </script>
 

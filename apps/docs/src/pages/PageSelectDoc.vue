@@ -59,6 +59,26 @@ const pageSelectCodes = {
   searchField="name"
   allowClear
 />`,
+  html: `<div id="user-picker"></div>
+<script type="module">
+  import { PageSelect } from '@argon-kit/html'
+  new PageSelect('#user-picker', {
+    service: async ({ pageNum, pageSize, keyword }) => {
+      // 业务侧先剥掉接口信封，返回 { list, total }
+      const res = await fetch('/api/users?pageNum=' + pageNum + '&pageSize=' + pageSize + '&name=' + (keyword || ''))
+      return res.json()
+    },
+    columns: [
+      { key: 'name', title: '姓名', dataIndex: 'name' },
+      { key: 'email', title: '邮箱', dataIndex: 'email' },
+    ],
+    rowKey: 'id',
+    labelField: 'name',
+    searchField: 'name',
+    allowClear: true,
+    onChange: (record) => console.log(record),
+  })
+<\/script>`,
 };
 </script>
 

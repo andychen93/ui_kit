@@ -27,6 +27,24 @@ const treeCodes = {
   vue: `<TreeSelect v-model="id" :data="data" allow-clear />`,
   react: `<TreeSelect value={id} onChange={setId} data={data} allowClear />`,
   svelte: `<TreeSelect bind:value={id} {data} allowClear />`,
+  html: `<div id="dept"></div>
+<script type="module">
+  import { TreeSelect } from '@argon-kit/html'
+  new TreeSelect('#dept', {
+    placeholder: '选择部门',
+    treeData: [
+      {
+        key: 'org',
+        title: '组织',
+        children: [
+          { key: 'rd', title: '研发', children: [{ key: 'fe', title: '前端' }, { key: 'be', title: '后端' }] },
+          { key: 'prod', title: '产品' },
+        ],
+      },
+    ],
+    onChange: (value) => console.log(value),
+  })
+<\/script>`,
 };
 </script>
 

@@ -9,11 +9,25 @@ const notifCodes = {
   vue: `import { notification } from '@argon-kit/vue';\n\nnotification.success({\n  title: '保存成功',\n  content: '数据已写入数据库',\n  duration: 4500,\n});`,
   react: `import { notification } from '@argon-kit/react';\n\nnotification.success({ title: '保存成功', content: '数据已写入数据库' });`,
   svelte: `import { notification } from '@argon-kit/svelte';\n\nnotification.success({ title: '保存成功', content: '数据已写入数据库' });`,
+  html: `<button id="btn">Success</button>
+<script type="module">
+  import { notification } from '@argon-kit/html'
+  document.querySelector('#btn').addEventListener('click', () => {
+    notification.success('保存成功', '数据已写入数据库', 4500)
+  })
+<\/script>`,
 };
 const spinCodes = {
   vue: `<Spin />\n<Spin spinning size="lg" text="加载中…">内容</Spin>`,
   react: `<Spin />\n<Spin spinning size="lg" text="加载中…">内容</Spin>`,
   svelte: `<Spin />\n<Spin spinning size="lg" text="加载中…">内容</Spin>`,
+  html: `<div id="spin"></div>
+<div id="spin-lg"></div>
+<script type="module">
+  import { Spin } from '@argon-kit/html'
+  new Spin('#spin')
+  new Spin('#spin-lg', { size: 'lg', tip: '加载中…' })
+<\/script>`,
 };
 
 function fire(type: (typeof types)[number]) {

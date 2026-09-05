@@ -60,6 +60,16 @@ const codes = {
 >
   页面内容
 </AppShell>`,
+  html: `<div id="shell"></div>
+<script type="module">
+  import { AppShell } from '@argon-kit/html'
+  const shell = new AppShell('#shell', {
+    header: 'Argon',
+    sidebar: '系统 / 用户',
+    footer: '© 2026 Argon UI Kit',
+  })
+  shell.setContent('页面内容')
+<\/script>`,
 };
 </script>
 
