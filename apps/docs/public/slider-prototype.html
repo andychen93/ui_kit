@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RangeSlider 改版原型</title>
+<style>
+  :root {
+    --ag-primary: #5e72e4;
+    --ag-primary-600: #4c5fd7;
+    --ag-gray-100: #f6f9fc;
+    --ag-gray-200: #e9ecef;
+    --ag-gray-300: #dee2e6;
+    --ag-gray-500: #adb5bd;
+    --ag-gray-600: #8898aa;
+    --ag-gray-700: #525f7f;
+    --ag-gray-800: #32325d;
+    --ag-radius: 4px;
+    --ag-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 40px 24px 80px;
+    font-family: "Open Sans", -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--ag-gray-100); color: var(--ag-gray-700);
+    display: flex; flex-direction: column; align-items: center; gap: 28px;
+  }
+  h1 { color: var(--ag-gray-800); font-size: 22px; margin: 0; }
+  .hint { font-size: 13px; color: var(--ag-gray-600); margin: -20px 0 0; }
+  .card {
+    width: min(680px, 100%); background: #fff; border-radius: 8px;
+    padding: 24px 28px 28px; box-shadow: 0 0 2rem 0 rgba(136, 152, 170, 0.15);
+  }
+  .card h2 { font-size: 15px; color: var(--ag-gray-800); margin: 0 0 4px; }
+  .card p.desc { font-size: 12.5px; color: var(--ag-gray-600); margin: 0 0 20px; }
+  .tag {
+    display: inline-block; font-size: 11px; background: #eef0fc; color: var(--ag-primary-600);
+    border-radius: 999px; padding: 1px 10px; margin-left: 8px; vertical-align: 2px;
+  }
+
+  /* ========== 通用双滑块底座（原生 input 覆盖法） ========== */
+  .rs { position: relative; height: 32px; }
+  .rs input[type="range"] {
+    position: absolute; inset: 0; width: 100%; margin: 0;
+    -webkit-appearance: none; appearance: none;
+    background: none; pointer-events: none;
+  }
+  .rs input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; pointer-events: auto; cursor: grab;
+  }
+  .rs input[type="range"]:active::-webkit-slider-thumb { cursor: grabbing; }
+  .rs input[type="range"]::-moz-range-thumb { pointer-events: auto; cursor: grab; border: 0; }
+
+  /* ========== 方案 A：Airbnb 风格（粗轨道 + 输入框联动） ========== */
+  .rs-a .track {
+    position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%);
+    height: 4px; border-radius: 999px; background: var(--ag-gray-300);
+  }
+  .rs-a .fill {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    height: 4px; border-radius: 999px; background: var(--ag-gray-900);
+  }
+  .rs-a input::-webkit-slider-thumb {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #fff; border: 1.5px solid var(--ag-gray-800);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+    transition: transform 0.12s ease;
+  }
+  .rs-a input::-webkit-slider-thumb:hover { transform: scale(1.12); }
+  .rs-a input::-moz-range-thumb {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  }
+  .io { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .io input.num {
+    width: 88px; border: 1px solid var(--ag-gray-300); border-radius: var(--ag-radius);
+    padding: 6px 10px; font-size: 13px; color: var(--ag-gray-800); outline: none;
+  }
+  .io input.num:focus { border-color: var(--ag-primary); box-shadow: 0 0 0 3px rgba(94, 114, 228, 0.15); }
+  .io .dash { color: var(--ag-gray-500); }
+  .io .unit { font-size: 13px; color: var(--ag-gray-600); margin-left: 2px; }
+
+  /* ========== 方案 B：品牌渐变 + 刻度锚点 ========== */
+  .rs-b .track {
+    position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%);
+    height: 8px; border-radius: 999px; background: var(--ag-gray-200);
+  }
+  .rs-b .fill {
+    position: absolute; top: 50%; transform: translateY(-50%); height: 8px; border-radius: 999px;
+    background: linear-gradient(90deg, #5e72e4, #825ee4);
+  }
+  .rs-b input::-webkit-slider-thumb {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #fff; border: 3px solid var(--ag-primary);
+    box-shadow: var(--ag-shadow); transition: border-color 0.12s ease, transform 0.12s ease;
+  }
+  .rs-b input::-webkit-slider-thumb:hover { border-color: var(--ag-primary-600); transform: scale(1.1); }
+  .rs-b input::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #fff; border: 3px solid var(--ag-primary); box-shadow: var(--ag-shadow);
+  }
+  .ticks { display: flex; justify-content: space-between; font-size: 11px; color: var(--ag-gray-500); padding: 4px 2px 0; }
+  .bubble {
+    position: absolute; bottom: 30px; transform: translateX(-50%);
+    background: var(--ag-gray-800); color: #fff; font-size: 12px;
+    padding: 2px 8px; border-radius: var(--ag-radius); white-space: nowrap;
+    opacity: 0; transition: opacity 0.12s ease; pointer-events: none;
+  }
+  .bubble::after {
+    content: ""; position: absolute; left: 50%; top: 100%; transform: translateX(-50%);
+    border: 4px solid transparent; border-top-color: var(--ag-gray-800);
+  }
+  .rs:hover .bubble, .rs.dragging .bubble { opacity: 1; }
+
+  /* ========== 方案 C：分布直方图叠加（SeatGeek 风格） ========== */
+  .rs-c { height: 64px; }
+  .rs-c .bars {
+    position: absolute; inset: 0 0 12px 0; display: flex; align-items: flex-end; gap: 3px;
+  }
+  .rs-c .bars i {
+    flex: 1; border-radius: 2px 2px 0 0; background: var(--ag-gray-300);
+    transition: background 0.15s ease;
+  }
+  .rs-c .bars i.on { background: var(--ag-primary); }
+  .rs-c .track {
+    position: absolute; bottom: 4px; left: 0; right: 0; height: 4px;
+    border-radius: 999px; background: var(--ag-gray-300);
+  }
+  .rs-c .fill {
+    position: absolute; bottom: 4px; height: 4px; border-radius: 999px; background: var(--ag-primary);
+  }
+  .rs-c input { top: 0; bottom: auto; height: 52px; }
+  .rs-c input::-webkit-slider-thumb {
+    width: 20px; height: 20px; border-radius: 50%; margin-top: 0;
+    background: #fff; border: 2.5px solid var(--ag-gray-800);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  .rs-c input::-moz-range-thumb {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #fff; border: 2.5px solid var(--ag-gray-800);
+  }
+  .legend { display: flex; justify-content: space-between; font-size: 11px; color: var(--ag-gray-500); margin-top: 8px; }
+  .legend b { color: var(--ag-primary-600); font-weight: 600; }
+
+  /* ========== 方案 D：极简细线 + 数值胶囊 ========== */
+  .rs-d .track {
+    position: absolute; top: 50%; left: 0; right: 0; transform: translateY(-50%);
+    height: 2px; background: var(--ag-gray-300);
+  }
+  .rs-d .fill {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    height: 2px; background: var(--ag-primary);
+  }
+  .rs-d input::-webkit-slider-thumb {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--ag-primary); border: 0;
+    transition: box-shadow 0.12s ease;
+  }
+  .rs-d input:hover::-webkit-slider-thumb { box-shadow: 0 0 0 6px rgba(94, 114, 228, 0.15); }
+  .rs-d input::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--ag-primary); }
+  .pills { display: flex; justify-content: space-between; margin-bottom: 10px; }
+  .pill {
+    font-size: 12px; color: var(--ag-primary-600); background: #eef0fc;
+    border-radius: 999px; padding: 2px 12px; font-weight: 600;
+  }
+</style>
+</head>
+<body>
+  <h1>RangeSlider 改版原型（4 个方案）</h1>
+  <p class="hint">参考 Airbnb / SeatGeek / Ant Design 等案例 · 拖动试试 · 悬停显示数值气泡</p>
+
+  <!-- 方案 A -->
+  <section class="card">
+    <h2>方案 A · Airbnb 风格<span class="tag">推荐用于筛选场景</span></h2>
+    <p class="desc">粗黑描边白拇指 + 深色选中段 + 数字输入框联动，方便精确输入</p>
+    <div class="io">
+      <input class="num" id="a-min" type="number" value="200" />
+      <span class="dash">–</span>
+      <input class="num" id="a-max" type="number" value="600" />
+      <span class="unit">元</span>
+    </div>
+    <div class="rs rs-a" id="a">
+      <div class="track"></div><div class="fill"></div>
+      <div class="bubble" style="left:0">200</div><div class="bubble" style="left:0">600</div>
+      <input type="range" min="100" max="1000" step="10" value="200" />
+      <input type="range" min="100" max="1000" step="10" value="600" />
+    </div>
+  </section>
+
+  <!-- 方案 B -->
+  <section class="card">
+    <h2>方案 B · 品牌渐变 + 刻度锚点<span class="tag">沿用现版基因</span></h2>
+    <p class="desc">渐变填充轨道 + 里程碑刻度 + 悬停/拖动数值气泡，视觉与 Argon 品牌一致</p>
+    <div class="rs rs-b" id="b">
+      <div class="track"></div><div class="fill"></div>
+      <div class="bubble" style="left:0">0</div><div class="bubble" style="left:0">40</div>
+      <input type="range" min="0" max="100" step="5" value="0" />
+      <input type="range" min="0" max="100" step="5" value="40" />
+    </div>
+    <div class="ticks"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+  </section>
+
+  <!-- 方案 C -->
+  <section class="card">
+    <h2>方案 C · 分布直方图叠加<span class="tag">数据感知</span></h2>
+    <p class="desc">轨道上方叠加价格/数量分布柱状图，选中区间高亮，帮用户找到划算区间（SeatGeek 式）</p>
+    <div class="rs rs-c" id="c">
+      <div class="bars"></div>
+      <div class="track"></div><div class="fill"></div>
+      <input type="range" min="0" max="100" step="5" value="20" />
+      <input type="range" min="0" max="100" step="5" value="70" />
+    </div>
+    <div class="legend"><span>区间内 <b id="c-count">–</b> 条结果</span><span>均价 ¥256</span></div>
+  </section>
+
+  <!-- 方案 D -->
+  <section class="card">
+    <h2>方案 D · 极简细线<span class="tag">轻量场景</span></h2>
+    <p class="desc">2px 细线 + 实心小圆点 + 数值胶囊，适合表单内嵌、空间紧凑处</p>
+    <div class="pills"><span class="pill" id="d-min">20 GB</span><span class="pill" id="d-max">80 GB</span></div>
+    <div class="rs rs-d" id="d">
+      <div class="track"></div><div class="fill"></div>
+      <input type="range" min="0" max="100" step="5" value="20" />
+      <input type="range" min="0" max="100" step="5" value="80" />
+    </div>
+  </section>
+
+<script>
+  function bindRange(rootId, { onChange, gap = 0 } = {}) {
+    const root = document.getElementById(rootId);
+    const inputs = [...root.querySelectorAll("input[type=range]")];
+    const fill = root.querySelector(".fill");
+    const bubbles = [...root.querySelectorAll(".bubble")];
+    const pct = (i) => (i.value - i.min) / (i.max - i.min) * 100;
+
+    function update() {
+      let lo = +inputs[0].value, hi = +inputs[1].value;
+      if (lo > hi - gap) { // 防重叠
+        if (document.activeElement === inputs[0]) lo = hi - gap; else hi = lo + gap;
+        lo = Math.max(+inputs[0].min, lo); hi = Math.min(+inputs[1].max, hi);
+        inputs[0].value = lo; inputs[1].value = hi;
+      }
+      const l = pct(inputs[0]), r = pct(inputs[1]);
+      fill.style.left = l + "%"; fill.style.width = (r - l) + "%";
+      bubbles.forEach((b, i) => { b.style.left = (i ? r : l) + "%"; b.textContent = i ? hi : lo; });
+      inputs[0].style.zIndex = lo >= hi - gap ? 5 : 1; // 让左滑块可越过右滑块
+      inputs.forEach((i) => i.addEventListener("pointerdown", () => root.classList.add("dragging")));
+      onChange && onChange(lo, hi);
+    }
+    inputs.forEach((i) => {
+      i.addEventListener("input", update);
+      i.addEventListener("pointerup", () => root.classList.remove("dragging"));
+    });
+    update();
+    return update;
+  }
+
+  // 方案 A：输入框双向联动
+  const aInputs = [document.getElementById("a-min"), document.getElementById("a-max")];
+  const aSync = bindRange("a", {
+    gap: 10,
+    onChange: (lo, hi) => { aInputs[0].value = lo; aInputs[1].value = hi; },
+  });
+  aInputs.forEach((el, i) =>
+    el.addEventListener("change", () => {
+      const rs = document.querySelectorAll("#a input[type=range]")[i];
+      rs.value = Math.min(Math.max(+el.value || 0, +rs.min), +rs.max);
+      aSync();
+    })
+  );
+
+  bindRange("b", { gap: 5 });
+
+  // 方案 C：直方图
+  const barsRoot = document.querySelector("#c .bars");
+  const dist = [2, 5, 9, 14, 20, 27, 33, 30, 24, 18, 12, 8, 5, 3, 2, 1, 1, 2, 3, 2];
+  dist.forEach((h) => {
+    const b = document.createElement("i"); b.style.height = h * 2.2 + "%"; barsRoot.appendChild(b);
+  });
+  const bars = [...barsRoot.children];
+  const total = dist.reduce((s, x) => s + x, 0);
+  function cUpdate(lo, hi) {
+    const t = lo / 100 * dist.length, u = hi / 100 * dist.length;
+    let cnt = 0;
+    bars.forEach((b, i) => {
+      const mid = (i + 0.5) / dist.length * 100;
+      const on = mid >= lo && mid <= hi;
+      b.classList.toggle("on", on);
+      if (on) cnt += dist[i];
+    });
+    document.getElementById("c-count").textContent = cnt;
+  }
+  bindRange("c", { gap: 5, onChange: cUpdate });
+
+  // 方案 D
+  bindRange("d", { gap: 5, onChange: (lo, hi) => {
+    document.getElementById("d-min").textContent = lo + " GB";
+    document.getElementById("d-max").textContent = hi + " GB";
+  }});
+</script>
+</body>
+</html>

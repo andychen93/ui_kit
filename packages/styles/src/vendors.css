@@ -216,7 +216,7 @@
 .ag-fc .ag-fc-event--warning { background: var(--ag-warning); }
 .ag-fc .ag-fc-event--danger { background: var(--ag-danger); }
 
-/* ---------- noUiSlider ---------- */
+/* ---------- noUiSlider（方案 B：品牌渐变 + 刻度锚点 + 数值气泡） ---------- */
 .ag-noui {
   width: 100%;
 }
@@ -229,16 +229,17 @@
 }
 
 .ag-noui .noUi-horizontal {
-  height: 10px;
+  height: 8px;
 }
 
 .ag-noui .noUi-vertical {
-  width: 10px;
+  width: 8px;
 }
 
 .ag-noui .noUi-connect {
-  background: var(--ag-primary);
+  background: linear-gradient(90deg, var(--ag-primary), #825ee4);
   box-shadow: none;
+  border-radius: 999px;
 }
 
 .ag-noui .noUi-handle {
@@ -250,11 +251,23 @@
   box-shadow: var(--ag-shadow);
   cursor: grab;
   right: -11px;
-  top: -6px;
+  top: -7px;
+  transition: border-color 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-.ag-noui .noUi-handle:active {
+.ag-noui .noUi-handle:hover {
+  border-color: var(--ag-primary);
+  transform: scale(1.1);
+  box-shadow: 0 0 0 6px rgba(94, 114, 228, 0.15), var(--ag-shadow);
+}
+
+.ag-noui .noUi-handle:active,
+.ag-noui .noUi-handle:focus-visible {
   cursor: grabbing;
+  border-color: var(--ag-primary);
+  transform: scale(1.1);
+  box-shadow: 0 0 0 6px rgba(94, 114, 228, 0.22), var(--ag-shadow);
+  outline: none;
 }
 
 .ag-noui .noUi-handle::before,
@@ -269,11 +282,44 @@
   border-radius: var(--ag-radius);
   font-size: 12px;
   padding: 2px 8px;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+}
+
+.ag-noui .noUi-tooltip::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--ag-gray-800);
+}
+
+.ag-noui .noUi-handle:hover .noUi-tooltip,
+.ag-noui .noUi-handle:focus-visible .noUi-tooltip {
+  transform: translateY(2px);
 }
 
 .ag-noui .noUi-pips {
   color: var(--ag-gray-500);
   font-size: 11px;
+}
+
+.ag-noui .noUi-marker-large {
+  width: 1px;
+  height: 7px;
+  background: var(--ag-gray-400);
+}
+
+.ag-noui .noUi-marker-normal {
+  width: 1px;
+  height: 4px;
+  background: var(--ag-gray-300);
+}
+
+.ag-noui .noUi-value-large {
+  color: var(--ag-gray-600);
+  font-weight: 600;
 }
 
 .ag-noui--disabled {

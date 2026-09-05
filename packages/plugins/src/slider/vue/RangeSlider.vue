@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 import noUiSlider from "nouislider";
+import { PipsMode } from "nouislider";
 import "nouislider/dist/nouislider.css";
 import type { RangeSliderProps } from "../../core/types";
 
@@ -10,6 +11,7 @@ const props = withDefaults(defineProps<RangeSliderProps>(), {
   max: 100,
   step: 1,
   tooltips: false,
+  pips: false,
   disabled: false,
 });
 
@@ -39,6 +41,9 @@ onMounted(() => {
     step: props.step,
     range: { min: props.min, max: props.max },
     tooltips: props.tooltips,
+    pips: props.pips
+      ? { mode: PipsMode.Positions, values: [0, 25, 50, 75, 100], density: 5 }
+      : undefined,
   }) as unknown as NouiApi;
   slider.on("update", (values: string[]) => {
     const nums = values.map(Number);

@@ -10,11 +10,11 @@ const tags = ref<string[]>(["高速公路", "夜间"]);
 
 const sliderCodes = {
   vue: `<RangeSlider v-model="price" :min="100" :max="500" :step="10" />
-<RangeSlider v-model="range" :min="0" :max="1000" tooltips />`,
+<RangeSlider v-model="range" :min="0" :max="1000" tooltips pips />`,
   react: `<RangeSlider value={price} min={100} max={500} step={10} onChange={setPrice} />
-<RangeSlider value={range} min={0} max={1000} tooltips onChange={setRange} />`,
+<RangeSlider value={range} min={0} max={1000} tooltips pips onChange={setRange} />`,
   svelte: `<RangeSlider bind:value={price} min={100} max={500} step={10} />
-<RangeSlider bind:value={range} min={0} max={1000} tooltips />`,
+<RangeSlider bind:value={range} min={0} max={1000} tooltips pips />`,
 };
 const tagsCodes = {
   vue: `<TagsInput v-model="tags" :max-tags="5" only-unique placeholder="输入标签后回车" />`,
@@ -26,7 +26,7 @@ const tagsCodes = {
 <template>
   <h1>RangeSlider / TagsInput</h1>
   <p class="doc-lead">
-    noUiSlider 底座的滑杆（主色填充 + 白底圆拇指）与自研标签输入。
+    noUiSlider 底座的滑杆（品牌渐变填充 + 白底圆拇指 + 刻度锚点与数值气泡）与自研标签输入。
     独立包 <code>@argon-kit/plugins</code>。
   </p>
 
@@ -40,7 +40,7 @@ const tagsCodes = {
       <p style="margin: 0 0 8px; font-size: 13px; color: var(--ag-gray-600)">
         里程区间：{{ range[0] }} – {{ range[1] }} km
       </p>
-      <RangeSlider v-model="range" :min="0" :max="1000" :step="20" tooltips />
+      <RangeSlider v-model="range" :min="0" :max="1000" :step="20" tooltips pips />
     </div>
   </DemoBlock>
 
@@ -56,6 +56,7 @@ const tagsCodes = {
       ['value（Slider）', '单值或 [start, end]', 'number | [number, number]', '0'],
       ['min / max / step（Slider）', '范围与步长', 'number', '0 / 100 / 1'],
       ['tooltips（Slider）', '气泡提示', 'boolean', 'false'],
+      ['pips（Slider）', '刻度锚点（0/25/50/75/100）', 'boolean', 'false'],
       ['value（Tags）', '标签数组（v-model）', 'string[]', '[]'],
       ['maxTags / onlyUnique（Tags）', '数量上限 / 去重', 'number / boolean', '∞ / false'],
     ]"

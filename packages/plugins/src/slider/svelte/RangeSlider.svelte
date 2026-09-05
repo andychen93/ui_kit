@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import noUiSlider from "nouislider";
+  import noUiSlider, { PipsMode } from "nouislider";
   import "nouislider/dist/nouislider.css";
   import type { RangeSliderProps } from "../../core/types";
 
@@ -10,6 +10,7 @@
     max = 100,
     step = 1,
     tooltips = false,
+    pips = false,
     disabled = false,
     onchange,
   }: RangeSliderProps & { value?: number | [number, number] } = $props();
@@ -28,6 +29,9 @@
       step,
       range: { min, max },
       tooltips,
+      pips: pips
+        ? { mode: PipsMode.Positions, values: [0, 25, 50, 75, 100], density: 5 }
+        : undefined,
     });
     slider.on("update", (values) => {
       const nums = values.map(Number);

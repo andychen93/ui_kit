@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import noUiSlider from "nouislider";
+import noUiSlider, { PipsMode } from "nouislider";
 import "nouislider/dist/nouislider.css";
 import type { RangeSliderProps } from "../../core/types";
 
@@ -13,6 +13,7 @@ export function RangeSlider({
   max = 100,
   step = 1,
   tooltips = false,
+  pips = false,
   disabled = false,
   onChange,
 }: RangeSliderProps) {
@@ -29,6 +30,9 @@ export function RangeSlider({
       step,
       range: { min, max },
       tooltips,
+      pips: pips
+        ? { mode: PipsMode.Positions, values: [0, 25, 50, 75, 100], density: 5 }
+        : undefined,
     });
     slider.on("update", (values) => {
       const nums = values.map(Number);
@@ -42,7 +46,7 @@ export function RangeSlider({
     if (disabled) el.noUiSlider?.disable(true);
     return () => el.noUiSlider?.destroy();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [min, max, step, tooltips]);
+  }, [min, max, step, tooltips, pips]);
 
   useEffect(() => {
     const el = elRef.current as (HTMLDivElement & {

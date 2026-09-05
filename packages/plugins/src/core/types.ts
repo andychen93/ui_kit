@@ -7,6 +7,8 @@ export interface RangeSliderProps {
   step?: number;
   /** 滑杆上方气泡提示 */
   tooltips?: boolean;
+  /** 下方刻度锚点（0/25/50/75/100 里程碑 + 细分刻度） */
+  pips?: boolean;
   disabled?: boolean;
   onChange?: (value: number | [number, number]) => void;
 }
